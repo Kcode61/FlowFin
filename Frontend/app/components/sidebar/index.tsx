@@ -50,6 +50,9 @@ export function Sidebar() {
       email: "admin@email.com",
       password: "",
       cargo: "ADMIN",
+      receitas: [],
+      despesas: [],
+      projetos: [],
     });
   }, []);
   const menuLinks: {
