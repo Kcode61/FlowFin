@@ -4,4 +4,7 @@ export type user = {
   email: string;
   password: string;
   cargo: string;
+  receitas: String[];
+  despesas: String[];
+  projetos: String[];
 };
