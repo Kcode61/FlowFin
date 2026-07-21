@@ -43,18 +43,6 @@ export function Sidebar() {
 
     carregarUsuario();
   }, []);
-  useEffect(() => {
-    setUsuario({
-      id: 1,
-      nome: "Admin",
-      email: "admin@email.com",
-      password: "",
-      cargo: "ADMIN",
-      receitas: [],
-      despesas: [],
-      projetos: [],
-    });
-  }, []);
   const menuLinks: {
     href: string;
     icon: React.ReactNode;

@@ -33,15 +33,7 @@ export default function Perfil() {
 
     carregarUsuario();
   }, []);
-  useEffect(() => {
-    setUsuario({
-      id: 1,
-      nome: "Admin",
-      email: "admin@email.com",
-      password: "",
-      cargo: "ADMIN",
-    });
-  }, []);
+ 
   return (
     <section className="py-10 px-4 bg-[#09090B] h-screen ">
       <div className="max-w-7xl mx-auto">
