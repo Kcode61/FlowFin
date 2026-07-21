@@ -136,37 +136,7 @@ export default function Home() {
 
     carregarAnalisesDoAno();
   }, []);
-  useEffect(() => {
-    setUsuario({
-      id: 1,
-      nome: "Admin",
-      email: "admin@email.com",
-      password: "",
-      cargo: "ADMIN",
-      receitas: [
-        {
-          id: 1,
-          descricao: "Desenvolvimento de Landing Page",
-          valor: 850.0,
-          dataCriacao: "2026-07-19",
-          categoria: "SERVICOS",
-          clienteNome: "João Silva",
-          receitaStatus: "RECEBIDA",
-        },
-      ],
-      projetos: [],
-      despesas: [
-        {
-          id: 1,
-          categoria: "ALIMENTACAO",
-          despesaPagamento: "PIX",
-          dataCriacao: "2026-07-19",
-          descricao: "Almoço",
-          valor: 42.9,
-        },
-      ],
-    });
-  }, []);
+ 
   useEffect(() => {
     const pagamentosPendentes = async () => {
       try {

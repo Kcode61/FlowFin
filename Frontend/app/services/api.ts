@@ -236,6 +236,57 @@ export async function listarAnalisesDoAno() {
 
   return data;
 }
+export async function loginResponse(email: string, password: string) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`Erro ao fazer login: ${response.status}`);
+  }
+
+  const token = await response.text();
+
+  return token;
+}
+
+export async function registrarResponse(
+  email: string,
+  password: string,
+  name: string,
+) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+        name,
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`Erro ao fazer registro: ${response.status}`);
+  }
+
+  const text = await response.text();
+  return text ? JSON.parse(text) : { success: true };
+}
 export async function listarReceitas() {
   const token = localStorage.getItem("token");
 
