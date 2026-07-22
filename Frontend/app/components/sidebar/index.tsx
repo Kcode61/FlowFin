@@ -21,7 +21,7 @@ export function Sidebar() {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/user/me`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/me`,
           {
             method: "GET",
             headers: {
@@ -74,7 +74,6 @@ export function Sidebar() {
       label: "Perfil",
     },
   ];
-
   const pathname = usePathname();
 
   if (isLoading) {
@@ -105,10 +104,6 @@ export function Sidebar() {
       </div>
     );
   }
-
-  /*{  if (!usuario || error) {
-    return null;
-  }}*/
 
   return (
     <div className="hidden md:flex w-64 flex-col h-full py-5 bg-[#09090B] border-r border-[#222225]">

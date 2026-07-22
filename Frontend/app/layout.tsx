@@ -29,7 +29,7 @@ export default function RootLayout({
     >
       <body className="h-screen flex" cz-shortcut-listen="true">
         <Sidebar />
-        <main className="flex-1"> {children}</main>
+        <main className="flex-1 "> {children}</main>
       </body>
     </html>
   );
