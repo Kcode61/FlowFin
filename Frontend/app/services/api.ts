@@ -1,14 +1,11 @@
 export async function buscarUsuario() {
   const token = localStorage.getItem("token");
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/users/me`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/me`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
     },
-  );
+  });
 
   if (!response.ok) {
     return null;

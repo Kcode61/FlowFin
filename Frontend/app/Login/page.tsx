@@ -1,7 +1,7 @@
 "use client";
 
 import { LogIn, Mail, Lock } from "lucide-react";
-import { useEffect, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginResponse } from "../services/api";
 
@@ -10,7 +10,9 @@ export default function Login() {
   const [senha, setSenha] = useState("");
   const [Error, setError] = useState(false);
   const router = useRouter();
-  async function fazerLogin() {
+
+  async function fazerLogin(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     setError(false);
 
     try {
@@ -18,7 +20,7 @@ export default function Login() {
 
       localStorage.setItem("token", token);
 
-      router.push("/cassino");
+      router.push("/");
     } catch {
       setError(true);
     }
@@ -56,7 +58,7 @@ export default function Login() {
             <div className="flex-1 h-px bg-[#2A2A2F]" />
           </div>
 
-          <form className="space-y-5">
+          <form className="space-y-5" onSubmit={fazerLogin}>
             <div>
               <label className="block text-white mb-2 font-medium">Email</label>
 
@@ -71,21 +73,7 @@ export default function Login() {
                   onChange={(e) => setEmail(e.target.value)}
                   type="email"
                   placeholder="voce@email.com"
-                  className="
-                    w-full
-                    h-14
-                    rounded-xl
-                    bg-transparent
-                    border
-                    border-[#2A2A2F]
-                    pl-12
-                    pr-4
-                    text-white
-                    placeholder:text-[#71717A]
-                    outline-none
-                    focus:border-[#F9C815]
-                    transition
-                  "
+                  className="w-full h-14 rounded-xl bg-transparent border border-[#2A2A2F] pl-12 pr-4 text-white placeholder:text-[#71717A] outline-none focus:border-[#F9C815] transition"
                 />
               </div>
             </div>
@@ -113,58 +101,36 @@ export default function Login() {
                   onChange={(e) => setSenha(e.target.value)}
                   type="password"
                   placeholder="••••••••"
-                  className="
-                    w-full
-                    h-14
-                    rounded-xl
-                    bg-transparent
-                    border
-                    border-[#2A2A2F]
-                    pl-12
-                    pr-4
-                    text-white
-                    placeholder:text-[#71717A]
-                    outline-none
-                    focus:border-[#F9C815]
-                    transition
-                  "
+                  className="w-full h-14 rounded-xl bg-transparent border border-[#2A2A2F] pl-12 pr-4 text-white placeholder:text-[#71717A] outline-none focus:border-[#F9C815] transition"
                 />
               </div>
             </div>
 
             <button
-              onClick={fazerLogin}
-              className="
-                w-full
-                h-12
-cursor-pointer                rounded-xl
-                bg-[#F9C815]
-                font-semibold
-                text-[#09090B]
-                transition
-                hover:bg-[#ffd53b]
-                mt-2
-              "
+              type="submit"
+              className="w-full h-12 cursor-pointer rounded-xl bg-[#F9C815] font-semibold text-[#09090B] transition hover:bg-[#ffd53b] mt-2"
             >
               Entrar
             </button>
           </form>
         </div>
 
-        <p className="text-center text-[#A1A1AA] mt-8">
-          Não tem uma conta?{" "}
-          <a
-            href="/Register"
-            className="text-[#F9C815] font-medium hover:underline"
-          >
-            Criar conta
-          </a>
+        <div className="mt-8 text-center">
+          <p className="text-[#A1A1AA]">
+            Não tem uma conta?{" "}
+            <a
+              href="/Register"
+              className="text-[#F9C815] font-medium hover:underline"
+            >
+              Criar conta
+            </a>
+          </p>
           {Error && (
-            <p className="text-red-400 font-bold text-sm">
+            <p className="text-red-400 font-bold text-sm mt-3">
               Erro ao logar, verifique o email ou a senha
             </p>
           )}
-        </p>
+        </div>
       </div>
     </section>
   );
