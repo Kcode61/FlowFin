@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { user } from "./types/user";
+import { Receita, ReceitaStatus, user } from "./types/user";
 import {
   ArrowUpRight,
   CalendarArrowDown,
@@ -31,33 +31,12 @@ type Grafico = {
   receitas: number;
   despesas: number;
 };
-enum ReceitaCategoria {
-  PROJETO = "PROJETO",
-  RECORRENTE = "RECORRENTE",
-  CONSULTORIA = "CONSULTORIA",
-}
 
-enum ReceitaStatus {
-  RECEBIDO = "RECEBIDO",
-  AGUARDANDO = "AGUARDANDO",
-  ATRASADO = "ATRASADO",
-}
-
-interface Receita {
-  id: number;
-  descricao: string;
-  valor: number;
-  dataCriacao: string;
-  categoria: ReceitaCategoria;
-  clienteNome: string;
-  receitaStatus: ReceitaStatus;
-}
 export default function Home() {
   const [usuario, setUsuario] = useState<user | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [receitasPendentes, setReceitasPendentes] = useState(0);
-  const [pagamentosProximos, setPagamentosProximos] = useState<Receita[]>([]);
   const [totalDespesas, setTotalDespesas] = useState(0);
   const [totalReceitas, setTotalReceitas] = useState(0);
   const [totalProjetos, setTotalProjetos] = useState(0);

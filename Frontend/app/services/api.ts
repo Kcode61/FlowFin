@@ -134,6 +134,18 @@ export async function deletarDespesa(id: number) {
 
   return true;
 }
+export async function deletarUsuario() {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/me`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.ok;
+}
 export async function deletarReceita(id: number) {
   const token = localStorage.getItem("token");
 
