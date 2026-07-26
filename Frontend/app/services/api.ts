@@ -83,10 +83,9 @@ export async function adicionarReceita(
 export async function adicionarDespesa(
   descricao: string,
   valor: number,
-  pagamento: number,
+  pagamento: string,
   categoria: string,
   dataInicio: string,
-  status: string,
 ) {
   const token = localStorage.getItem("token");
 
@@ -102,9 +101,8 @@ export async function adicionarDespesa(
         descricao,
         valor,
         categoria,
-        pagamento,
-        dataInicio,
-        status,
+        despesaPagamento: pagamento,
+        dataCriacao: dataInicio,
       }),
     },
   );

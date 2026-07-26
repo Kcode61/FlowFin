@@ -54,22 +54,22 @@ export function Sidebar() {
       label: "Dashboard",
     },
     {
-      href: "/projetos",
+      href: "/Projetos",
       icon: <FolderKanban className="w-5 h-5" />,
       label: "Projetos",
     },
     {
-      href: "/receitas",
+      href: "/Receitas",
       icon: <TrendingUp className="w-5 h-5" />,
       label: "Receitas",
     },
     {
-      href: "/despesas",
+      href: "/Despesas",
       icon: <TrendingDown className="w-5 h-5" />,
       label: "Despesas",
     },
     {
-      href: "/perfil",
+      href: "/Perfil",
       icon: <User className="w-5 h-5" />,
       label: "Perfil",
     },

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Receita, ReceitaStatus, user } from "./types/user";
+import { Receita, ReceitaCategoria, ReceitaStatus, user } from "./types/user";
 import {
   ArrowUpRight,
   CalendarArrowDown,
@@ -64,6 +64,28 @@ export default function Home() {
 
     carregarReceitas();
   }, []);
+
+  function categoriaNome(categoria: ReceitaCategoria) {
+    switch (categoria) {
+      case ReceitaCategoria.CONSULTORIA:
+        return "Consultoria";
+      case ReceitaCategoria.RECORRENTE:
+        return "Recorrente";
+      case ReceitaCategoria.PROJETO:
+        return "Projeto";
+    }
+  }
+
+  function statusNome(p: ReceitaStatus) {
+    switch (p) {
+      case ReceitaStatus.RECEBIDO:
+        return "Recebido";
+      case ReceitaStatus.ATRASADO:
+        return "Atrasado";
+      case ReceitaStatus.AGUARDANDO:
+        return "Aguardando";
+    }
+  }
   useEffect(() => {
     async function carregarReceitas() {
       try {
@@ -114,6 +136,7 @@ export default function Home() {
     const carregarTotalDespesas = async () => {
       try {
         const despesas = await listarDespesas();
+        console.log("DESPESAS DASHBOARD:", despesas);
 
         if (!despesas) return;
 
@@ -153,7 +176,7 @@ export default function Home() {
         const dados = await listarAnalisesDoAno();
 
         if (!dados) return;
-
+        console.log("DADOS DO GRÁFICO:", dados);
         setGrafico(dados);
       } catch (error) {
         console.error("Erro ao carregar Analises:", error);
@@ -241,7 +264,7 @@ export default function Home() {
 
         <div className="h-96 w-full rounded-2xl border border-zinc-800 bg-[#0c0c0e] p-6">
           <h2 className="mb-4 text-xl font-poppins font-bold text-white">
-            Receitas vs Despesas
+            Receitas vs Despesas de 2026
           </h2>
 
           <ResponsiveContainer width="100%" height="85%">
@@ -338,14 +361,15 @@ export default function Home() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">
-                        Pagamento {receita.receitaStatus} - {receita.categoria}
+                        Pagamento {statusNome(receita.receitaStatus)} -
+                        {categoriaNome(receita.categoria)}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {receita.dataCriacao}
                       </p>
                     </div>
                     <span className="text-sm font-semibold text-green-500">
-                      +R$ {receita.valor}
+                      +R$ {receita.valor.toFixed(2)}
                     </span>
                   </div>
                 ))}
@@ -368,10 +392,10 @@ export default function Home() {
                 {receitasAguardando.map((receita) => (
                   <div className="flex items-center justify-between text-sm">
                     <span className="truncate mr-2">
-                      Pagamento pendente - {receita.categoria}
+                      Pagamento pendente - {categoriaNome(receita.categoria)}
                     </span>
                     <span className="font-semibold text-primary">
-                      R$ {receita.valor}
+                      R$ {receita.valor.toFixed(2)}
                     </span>
                   </div>
                 ))}
