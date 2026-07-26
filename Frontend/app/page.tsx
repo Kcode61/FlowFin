@@ -4,6 +4,7 @@ import { Receita, ReceitaCategoria, ReceitaStatus, user } from "./types/user";
 import {
   ArrowUpRight,
   CalendarArrowDown,
+  Clock,
   DollarSign,
   LucideIcon,
 } from "lucide-react";
@@ -153,7 +154,27 @@ export default function Home() {
 
     carregarTotalDespesas();
   }, []);
+  useEffect(() => {
+    const carregarTotalReceitas = async () => {
+      try {
+        const receitas = await listarReceitas();
+        console.log("Receitas DASHBOARD:", receitas);
 
+        if (!receitas) return;
+
+        const total = receitas.reduce(
+          (acc: number, receita: { valor: number }) => acc + receita.valor,
+          0,
+        );
+
+        setTotalReceitas(total);
+      } catch (error) {
+        console.error("Erro ao carregar receitas:", error);
+      }
+    };
+
+    carregarTotalReceitas();
+  }, []);
   useEffect(() => {
     const carregarTotalProjetos = async () => {
       try {
@@ -240,6 +261,9 @@ export default function Home() {
   }, []);
   const receitasAguardando = receitas.filter(
     (receita) => receita.receitaStatus === ReceitaStatus.AGUARDANDO,
+  );
+  const receitasRecebidas = receitas.filter(
+    (receita) => receita.receitaStatus === ReceitaStatus.RECEBIDO,
   );
   return (
     <section className="py-10 px-4 bg-[#09090B] overflow-y-auto h-full ">
@@ -354,17 +378,20 @@ export default function Home() {
             </h2>
             {receitas.length > 0 ? (
               <ul>
-                {receitas.map((receita) => (
-                  <div className="flex items-center gap-3 py-2.5 border-b border-border last:border-0">
+                {receitasRecebidas.map((receita) => (
+                  <div
+                    key={receita.id}
+                    className="flex items-center gap-3 py-2.5 border-b border-border last:border-0"
+                  >
                     <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-green-500/10 text-green-500">
                       <ArrowUpRight className="w-4 h-4" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">
+                      <p className="text-sm font-medium text-white truncate">
                         Pagamento {statusNome(receita.receitaStatus)} -
                         {categoriaNome(receita.categoria)}
                       </p>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-white">
                         {receita.dataCriacao}
                       </p>
                     </div>
@@ -390,13 +417,21 @@ export default function Home() {
             {receitasAguardando.length > 0 ? (
               <ul>
                 {receitasAguardando.map((receita) => (
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="truncate mr-2">
-                      Pagamento pendente - {categoriaNome(receita.categoria)}
-                    </span>
-                    <span className="font-semibold text-primary">
-                      R$ {receita.valor.toFixed(2)}
-                    </span>
+                  <div
+                    key={receita.id}
+                    className="flex items-center gap-4 text-sm"
+                  >
+                    <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-yellow-500/10 text-yellow-500">
+                      <Clock className="w-4 h-4" />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="truncate text-white text-sm mr-2">
+                        Pagamento pendente - {categoriaNome(receita.categoria)}
+                      </span>
+                      <span className="font-semibold text-xs text-white">
+                        R$ {receita.valor.toFixed(2)}
+                      </span>
+                    </div>
                   </div>
                 ))}
               </ul>

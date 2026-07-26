@@ -48,10 +48,10 @@ export async function adicionarProjeto(
 export async function adicionarReceita(
   descricao: string,
   valor: number,
-  cliente: string,
+  clienteNome: string,
   categoria: string,
-  dataInicio: string,
-  status: string,
+  dataCriacao: string,
+  receitaStatus: string,
 ) {
   const token = localStorage.getItem("token");
 
@@ -67,9 +67,9 @@ export async function adicionarReceita(
         descricao,
         valor,
         categoria,
-        cliente,
-        dataInicio,
-        status,
+        clienteNome,
+        dataCriacao,
+        receitaStatus,
       }),
     },
   );
