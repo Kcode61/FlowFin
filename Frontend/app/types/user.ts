@@ -25,6 +25,11 @@ export enum DespesaPagamento {
   CARTAO = "CARTAO",
   DINHEIRO = "DINHEIRO",
 }
+export enum ProjetoStatus {
+  EM_ANDAMENTO = "EM ANDAMENTO",
+  CONCLUIDO = "CONCLUIDO",
+}
+
 export type Despesa = {
   id: number;
   categoria: DespesaCategoria;
@@ -43,7 +48,15 @@ export type Receita = {
   clienteNome: string;
   receitaStatus: ReceitaStatus;
 };
-
+export type Projeto = {
+  id: number;
+  valor: number;
+  descricao: string;
+  nome: string;
+  dataCriacao: string;
+  prazoFinalizacao: string;
+  projetoStatus: ProjetoStatus;
+};
 export type user = {
   id: number;
   nome: string;
@@ -52,5 +65,5 @@ export type user = {
   cargo: string;
   receitas: Receita[];
   despesas: Despesa[];
-  projetos: string[];
+  projetos: Projeto[];
 };

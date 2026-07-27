@@ -17,8 +17,8 @@ export async function adicionarProjeto(
   nome: string,
   descricao: string,
   valor: number,
-  dataFim: string,
-  dataInicio: string,
+  prazoFinalizacao: string,
+  dataCriacao: string,
   status: string,
 ) {
   const token = localStorage.getItem("token");
@@ -33,8 +33,8 @@ export async function adicionarProjeto(
       nome,
       descricao,
       valor,
-      dataFim,
-      dataInicio,
+      prazoFinalizacao,
+      dataCriacao,
       status,
     }),
   });
