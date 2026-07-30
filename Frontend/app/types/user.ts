@@ -26,7 +26,7 @@ export enum DespesaPagamento {
   DINHEIRO = "DINHEIRO",
 }
 export enum ProjetoStatus {
-  EM_ANDAMENTO = "EM ANDAMENTO",
+  EM_ANDAMENTO = "EM_ANDAMENTO",
   CONCLUIDO = "CONCLUIDO",
 }
 
@@ -34,7 +34,7 @@ export type Despesa = {
   id: number;
   categoria: DespesaCategoria;
   despesaPagamento: DespesaPagamento;
-  dataCriacao: string; // LocalDate -> ISO (yyyy-MM-dd)
+  dataCriacao: string;
   descricao: string;
   valor: number;
   userId?: number;
@@ -55,7 +55,7 @@ export type Projeto = {
   nome: string;
   dataCriacao: string;
   prazoFinalizacao: string;
-  projetoStatus: ProjetoStatus;
+  status: ProjetoStatus;
 };
 export type user = {
   id: number;

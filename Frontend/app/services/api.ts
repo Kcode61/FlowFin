@@ -23,21 +23,24 @@ export async function adicionarProjeto(
 ) {
   const token = localStorage.getItem("token");
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/me`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/projeto/me`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nome,
+        descricao,
+        valor,
+        prazoFinalizacao,
+        dataCriacao,
+        status,
+      }),
     },
-    body: JSON.stringify({
-      nome,
-      descricao,
-      valor,
-      prazoFinalizacao,
-      dataCriacao,
-      status,
-    }),
-  });
+  );
 
   if (!response.ok) {
     return null;
