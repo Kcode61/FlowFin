@@ -6,6 +6,7 @@ import kauan.projects.demo.Domain.DTOS.DespesaDTO;
 import kauan.projects.demo.Domain.DTOS.ProjetoDTO;
 import kauan.projects.demo.Domain.DTOS.ReceitaDTO;
 import kauan.projects.demo.Domain.ENUMS.ProjetoStatus;
+import kauan.projects.demo.Domain.ENUMS.ReceitaStatus;
 import kauan.projects.demo.Services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -123,6 +124,19 @@ public class UserController {
                return ResponseEntity.ok(toProjetoDTO(projetoDaLista));
            }
        }
+        return ResponseEntity.notFound().build();
+    }
+    @PatchMapping("/receita/me/{id}")
+    public ResponseEntity<ReceitaDTO> atualizarReceita(@PathVariable int id, @RequestBody ReceitaStatus receitaStatus, Authentication authentication) {
+        User user = userService.GetUsuarioLogado(authentication);
+        List<Receita> receitas = user.getReceitas();
+        for (Receita receitasDaLista : receitas) {
+            if (receitasDaLista.getId() == id) {
+                receitasDaLista.setReceitaStatus(receitaStatus);
+                userService.SalvarUser(user);
+                return ResponseEntity.ok(toReceitaDTO(receitasDaLista));
+            }
+        }
         return ResponseEntity.notFound().build();
     }
     @DeleteMapping("/despesa/me/{id}")
