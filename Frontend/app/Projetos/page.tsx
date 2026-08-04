@@ -1,9 +1,21 @@
 "use client";
 
-import { Calendar, Menu, Plus } from "lucide-react";
+import {
+  Ban,
+  Calendar,
+  CheckCircle2,
+  CircleDashed,
+  Menu,
+  Plus,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { Projeto, ProjetoStatus } from "../types/user";
-import { adicionarProjeto, listarProjetos } from "../services/api";
+import {
+  adicionarProjeto,
+  atualizarProjeto,
+  deletarProjeto,
+  listarProjetos,
+} from "../services/api";
 
 export default function Projetos() {
   const [projetos, setProjetos] = useState<Projeto[]>([]);
@@ -14,7 +26,7 @@ export default function Projetos() {
   const [nome, setNome] = useState("");
   const [prazoFinalizacao, setPrazoFinalizacao] = useState("");
   const [dataInicio, setDataInicio] = useState("");
-
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   const [status, setStatus] = useState<ProjetoStatus>(
     ProjetoStatus.EM_ANDAMENTO,
   );
@@ -104,7 +116,29 @@ export default function Projetos() {
       console.error("Erro ao criar projeto:", error);
     }
   }
+  async function handleStatusChange(id: number, status: ProjetoStatus) {
+    const projetoAtualizado = await atualizarProjeto(id, status);
 
+    if (!projetoAtualizado) {
+      console.error("Erro ao atualizar projeto");
+      return;
+    }
+
+    setProjetos((projetosAtuais) =>
+      projetosAtuais.map((projeto) =>
+        projeto.id === id ? projetoAtualizado : projeto,
+      ),
+    );
+  }
+  async function handleDelectProject(projeto_id: number) {
+    const ok = await deletarProjeto(projeto_id);
+
+    if (!ok) {
+      console.error("Erro ao deletar projeto");
+      return;
+    }
+    setProjetos((prev) => prev.filter((d) => d.id !== projeto_id));
+  }
   const inputDesign = `     h-12
     w-full
     rounded-[10px]
@@ -352,7 +386,7 @@ export default function Projetos() {
                       Projeto
                     </p>
                   </div>
-                  <div className="flex gap-2 items-center">
+                  <div className="flex relative gap-6 items-center">
                     <span
                       className={`shrink-0 rounded-full border px-3 py-1 font-poppins text-[11px] font-semibold ${
                         statusStyle[projeto.status]
@@ -360,9 +394,60 @@ export default function Projetos() {
                     >
                       {statusNome(projeto.status)}
                     </span>
-                    <button className="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#0E0D11] text-[#6B7280] ">
-                      <Menu size={18} />
+                    <button
+                      onClick={() =>
+                        setOpenMenuId(
+                          openMenuId === projeto.id ? null : projeto.id,
+                        )
+                      }
+                      className="flex items-center cursor-pointer justify-center rounded-full w-8 h-8 hover:bg-[#18181B] transition-all"
+                    >
+                      <Menu size={18} className="text-[#939DAA] " />
                     </button>
+                    {openMenuId === projeto.id && (
+                      <div className="absolute top-10 right-0 z-50 w-52 rounded-xl border border-[#222225] bg-[#09090B] p-2 shadow-xl">
+                        <button
+                          onClick={() => (
+                            setOpenMenuId(null),
+                            handleStatusChange(
+                              projeto.id,
+                              ProjetoStatus.EM_ANDAMENTO,
+                            )
+                          )}
+                          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[#A1A1AA] transition-all hover:bg-[#18181B] hover:text-white"
+                        >
+                          <CircleDashed size={18} className="text-yellow-400" />
+                          Em andamento
+                        </button>
+
+                        <button
+                          onClick={() => (
+                            setOpenMenuId(null),
+                            handleStatusChange(
+                              projeto.id,
+                              ProjetoStatus.CONCLUIDO,
+                            )
+                          )}
+                          className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[#A1A1AA] transition-all hover:bg-[#18181B] hover:text-white"
+                        >
+                          <CheckCircle2
+                            size={18}
+                            className="text-emerald-500"
+                          />
+                          Concluído
+                        </button>
+                        <button
+                          onClick={() => (
+                            handleDelectProject(projeto.id),
+                            setOpenMenuId(null)
+                          )}
+                          className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[#A1A1AA] transition-all hover:bg-[#18181B] hover:text-white"
+                        >
+                          <Ban size={18} className="text-red-500" />
+                          Excluir Projeto
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
 

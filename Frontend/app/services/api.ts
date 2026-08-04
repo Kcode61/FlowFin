@@ -1,3 +1,5 @@
+import { ProjetoStatus } from "../types/user";
+
 export async function buscarUsuario() {
   const token = localStorage.getItem("token");
 
@@ -107,6 +109,27 @@ export async function adicionarDespesa(
         despesaPagamento: pagamento,
         dataCriacao: dataInicio,
       }),
+    },
+  );
+
+  if (!response.ok) {
+    return null;
+  }
+
+  return await response.json();
+}
+export async function atualizarProjeto(id: number, status: ProjetoStatus) {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/projeto/me/${id}`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(status),
     },
   );
 
