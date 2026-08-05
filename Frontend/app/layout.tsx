@@ -27,7 +27,10 @@ export default function RootLayout({
       lang="pt-br"
       className={`h-full antialiased ${poppins.variable} font-inter`}
     >
-      <body className="h-screen flex" cz-shortcut-listen="true">
+      <body
+        className="h-screen flex md:flex-row flex-col"
+        cz-shortcut-listen="true"
+      >
         <Sidebar />
         <main className="flex-1 "> {children}</main>
       </body>
