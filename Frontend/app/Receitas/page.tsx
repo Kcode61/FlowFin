@@ -1,9 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import {
+  AlertCircle,
+  Ban,
+  CheckCircle2,
+  CircleDashed,
+  EllipsisVertical,
+  Plus,
+} from "lucide-react";
 import {
   adicionarReceita,
+  atualizarReceita,
   deletarReceita,
   listarReceitas,
 } from "../services/api";
@@ -49,6 +57,12 @@ export default function Receitas() {
   const [clienteNome, setClienteNome] = useState("");
   const [dataInicio, setDataInicio] = useState("");
   const [openCategoria, setOpenCategoria] = useState(false);
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [menuPosition, setMenuPosition] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
   const categorias = [
     {
       label: "Projeto",
@@ -88,6 +102,44 @@ export default function Receitas() {
 
     carregarReceitas();
   }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 768px)");
+
+    const updateDesktop = () => setIsDesktop(media.matches);
+
+    updateDesktop();
+    media.addEventListener("change", updateDesktop);
+
+    return () => media.removeEventListener("change", updateDesktop);
+  }, []);
+
+  function handleMenuToggle(
+    id: number,
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) {
+    const isSameMenu = openMenuId === id;
+    setOpenMenuId(isSameMenu ? null : id);
+
+    if (isSameMenu || !isDesktop) {
+      setMenuPosition(null);
+      return;
+    }
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    const menuWidth = 224;
+    const offsetRight = 32;
+    const left = Math.min(
+      Math.max(16, rect.right - menuWidth + offsetRight),
+      window.innerWidth - menuWidth - 16,
+    );
+
+    setMenuPosition({
+      top: rect.bottom + 14,
+      left,
+    });
+  }
+
   async function DeletarReceita(receita_id: number) {
     const ok = await deletarReceita(receita_id);
     if (!ok) {
@@ -95,6 +147,20 @@ export default function Receitas() {
       return;
     }
     setReceitas((prev) => prev.filter((d) => d.id !== receita_id));
+  }
+  async function handleStatusChange(id: number, status: ReceitaStatus) {
+    const receitaAtualizada = await atualizarReceita(id, status);
+
+    if (!receitaAtualizada) {
+      console.error("Erro ao atualizar projeto");
+      return;
+    }
+
+    setReceitas((receitasAnuais) =>
+      receitasAnuais.map((receita) =>
+        receita.id === id ? receitaAtualizada : receita,
+      ),
+    );
   }
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -180,7 +246,7 @@ export default function Receitas() {
                   onChange={(e) => setDescricao(e.target.value)}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div>
                   <label
                     htmlFor="valor"
@@ -376,7 +442,7 @@ export default function Receitas() {
       )}
       <section className="bg-[#09090B] h-full overflow-y-auto px-5 py-10">
         <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex flex-col gap-4 justify-between items-start md:flex-row md:items-center mb-8">
             <div>
               <h1 className="text-white text-2xl font-bold">Receitas</h1>
 
@@ -394,8 +460,8 @@ export default function Receitas() {
             </button>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-[#222225]">
-            <table className="w-full border-collapse">
+          <div className="overflow-x-auto bg-[#0E0E11] rounded-xl border border-[#222225]">
+            <table className="min-w-full border-collapse">
               <thead className="bg-[#0E0E11]">
                 <tr className="border-b border-[#222225]">
                   <th className="text-left px-8 py-3 text-[#a1a1aa] text-sm font-medium">
@@ -429,7 +495,7 @@ export default function Receitas() {
                 {receitas.map((receita) => (
                   <tr
                     key={receita.id}
-                    className="border-b bg-[#0E0E11] hover:bg-[#111113] border-[#222225] transition"
+                    className="border-b relative bg-[#0E0E11] hover:bg-[#111113] border-[#222225] transition"
                   >
                     <td className="px-6 py-5">
                       <span className="font-semibold text-white">
@@ -474,12 +540,90 @@ export default function Receitas() {
                         {statusNome(receita.receitaStatus)}
                       </span>
                     </td>
-                    <td className="px-6 py-5">
+                    <td className="relative px-4 py-5 md:px-10">
+                      {openMenuId === receita.id && (
+                        <div
+                          className={`absolute top-12 z-50 w-52 rounded-xl border border-[#222225] bg-[#09090B] p-2 shadow-xl md:w-56 ${
+                            isDesktop ? "" : "right-4"
+                          }`}
+                          style={
+                            isDesktop &&
+                            menuPosition &&
+                            openMenuId === receita.id
+                              ? {
+                                  position: "fixed",
+                                  top: menuPosition.top,
+                                  left: menuPosition.left,
+                                  width: 224,
+                                }
+                              : undefined
+                          }
+                        >
+                          <button
+                            onClick={() => (
+                              setOpenMenuId(null),
+                              handleStatusChange(
+                                receita.id,
+                                ReceitaStatus.ATRASADO,
+                              )
+                            )}
+                            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[#A1A1AA] transition-all hover:bg-[#18181B] hover:text-white"
+                          >
+                            <AlertCircle size={18} className="text-rose-400" />
+                            Atrasado
+                          </button>
+                          <button
+                            onClick={() => (
+                              setOpenMenuId(null),
+                              handleStatusChange(
+                                receita.id,
+                                ReceitaStatus.AGUARDANDO,
+                              )
+                            )}
+                            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[#A1A1AA] transition-all hover:bg-[#18181B] hover:text-white"
+                          >
+                            <CircleDashed
+                              size={18}
+                              className="text-yellow-400"
+                            />
+                            Em andamento
+                          </button>
+                          <button
+                            onClick={() => (
+                              setOpenMenuId(null),
+                              handleStatusChange(
+                                receita.id,
+                                ReceitaStatus.RECEBIDO,
+                              )
+                            )}
+                            className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[#A1A1AA] transition-all hover:bg-[#18181B] hover:text-white"
+                          >
+                            <CheckCircle2
+                              size={18}
+                              className="text-emerald-500"
+                            />
+                            Concluído
+                          </button>
+                          <button
+                            onClick={() => (
+                              DeletarReceita(receita.id),
+                              setOpenMenuId(null)
+                            )}
+                            className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[#A1A1AA] transition-all hover:bg-[#18181B] hover:text-white"
+                          >
+                            <Ban size={18} className="text-red-500" />
+                            Excluir receita
+                          </button>
+                        </div>
+                      )}
                       <button
-                        className=" rounded-full w-10 h-10 cursor-pointer hover:bg-[#222225]/30 transition ease duration-300 flex items-center  justify-center text-[#E83F3C]"
-                        onClick={() => DeletarReceita(receita.id)}
+                        onClick={(e) => handleMenuToggle(receita.id, e)}
+                        className="flex items-center cursor-pointer justify-center rounded-full w-8 h-8 hover:bg-[#18181B] transition-all"
                       >
-                        <Trash2 size={18} />
+                        <EllipsisVertical
+                          size={18}
+                          className="text-[#939DAA] "
+                        />
                       </button>
                     </td>
                   </tr>

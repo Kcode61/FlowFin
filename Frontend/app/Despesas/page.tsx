@@ -202,7 +202,7 @@ export default function Despesas() {
                   onChange={(e) => setDescricao(e.target.value)}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div>
                   <label
                     htmlFor="valor"
@@ -383,7 +383,7 @@ export default function Despesas() {
       )}
       <section className="bg-[#09090B] h-full overflow-y-auto px-5 py-10">
         <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex flex-col gap-4 justify-between items-start md:flex-row md:items-center mb-8">
             <div>
               <h1 className="text-white text-2xl font-bold">Despesas</h1>
 
@@ -402,7 +402,7 @@ export default function Despesas() {
           </div>
 
           <div className="overflow-x-auto rounded-xl border border-[#222225]">
-            <table className="w-full border-collapse">
+            <table className="min-w-full border-collapse">
               <thead className="bg-[#0E0E11]">
                 <tr className="border-b border-[#222225]">
                   <th className="text-left px-8 py-3 text-[#a1a1aa] text-sm font-medium">
