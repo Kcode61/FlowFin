@@ -191,7 +191,7 @@ export function Sidebar() {
         </div>
       </aside>
 
-      <header className="flex h-full w-full items-center justify-between border-b border-[#222225] bg-[#09090B] px-4 py-5 lg:hidden">
+      <header className="flex w-full items-center justify-between border-b border-[#222225] bg-[#09090B] px-4 py-5 lg:hidden">
         <div className="flex items-center gap-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FACC15]">
             <WalletIcon

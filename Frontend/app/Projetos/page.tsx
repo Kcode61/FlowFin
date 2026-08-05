@@ -165,7 +165,7 @@ export default function Projetos() {
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        <div className="fixed inset-0 px-4 z-50 flex items-center justify-center bg-black/50">
           <div className="flex w-full max-w-xl flex-col gap-4 rounded-2xl border border-[#222225] bg-[#0E0D11] p-6">
             <h2 className="mb-4 font-poppins text-xl font-bold text-white">
               Novo Projeto{" "}
@@ -352,7 +352,7 @@ export default function Projetos() {
 
       <section className="h-full overflow-y-auto bg-[#09090B] px-5 py-10">
         <div className="mx-auto max-w-7xl">
-          <div className="mb-8 flex items-center justify-between">
+          <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6 items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-white">Projetos</h1>
 
@@ -363,7 +363,7 @@ export default function Projetos() {
 
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="flex cursor-pointer items-center gap-2 rounded-xl bg-[#FACC15] px-4 py-3 text-sm font-medium text-[#201A06] transition hover:brightness-95"
+              className="flex justify-center lg:justify-normal cursor-pointer items-center gap-2 rounded-xl bg-[#FACC15] px-4 py-3 text-sm font-medium text-[#201A06] transition hover:brightness-95"
             >
               <Plus size={17} />
               Novo Projeto

@@ -401,7 +401,7 @@ export default function Despesas() {
             </button>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-[#222225]">
+          <div className="hidden md:block overflow-x-auto rounded-xl border border-[#222225]">
             <table className="min-w-full border-collapse">
               <thead className="bg-[#0E0E11]">
                 <tr className="border-b border-[#222225]">
@@ -482,6 +482,64 @@ export default function Despesas() {
               </tbody>
             </table>
             <div className="bg-[#0E0E11] w-full px-6 py-5"></div>
+          </div>
+
+          <div className="flex flex-col gap-3 md:hidden">
+            {despesas.map((despesa) => (
+              <div
+                key={despesa.id}
+                className="rounded-xl border border-[#222225] bg-[#0E0E11] p-4"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="font-semibold text-white">
+                      {despesa.descricao}
+                    </p>
+                    <span
+                      className={`mt-2 inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
+                        categoriaStyle[despesa.categoria]
+                      }`}
+                    >
+                      {categoriaNome(despesa.categoria)}
+                    </span>
+                  </div>
+
+                  <button
+                    className="flex h-10 w-10 items-center justify-center rounded-full text-[#E83F3C] transition hover:bg-[#222225]/30"
+                    onClick={() => DeletarDespesas(despesa.id)}
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+
+                <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                  <div>
+                    <p className="text-[#a1a1aa]">Valor</p>
+                    <p className="mt-1 font-bold text-[#E83F3C]">
+                      -{" "}
+                      {despesa.valor.toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      })}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-[#a1a1aa]">Data</p>
+                    <p className="mt-1 text-zinc-300">
+                      {new Date(despesa.dataCriacao).toLocaleDateString(
+                        "pt-BR",
+                      )}
+                    </p>
+                  </div>
+                  <div className="col-span-2">
+                    <p className="text-[#a1a1aa]">Pagamento</p>
+                    <p className="mt-1 text-zinc-300">
+                      {pagamentoNome(despesa.despesaPagamento)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

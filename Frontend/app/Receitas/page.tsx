@@ -460,7 +460,7 @@ export default function Receitas() {
             </button>
           </div>
 
-          <div className="overflow-x-auto bg-[#0E0E11] rounded-xl border border-[#222225]">
+          <div className="hidden md:block overflow-x-auto bg-[#0E0E11] rounded-xl border border-[#222225]">
             <table className="min-w-full border-collapse">
               <thead className="bg-[#0E0E11]">
                 <tr className="border-b border-[#222225]">
@@ -631,6 +631,130 @@ export default function Receitas() {
               </tbody>
             </table>
             <div className="bg-[#0E0E11] w-full px-6 py-5"></div>
+          </div>
+
+          <div className="flex flex-col gap-3 md:hidden">
+            {receitas.map((receita) => (
+              <div
+                key={receita.id}
+                className="rounded-xl border border-[#222225] bg-[#0E0E11] p-4"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="font-semibold text-white">
+                      {receita.descricao}
+                    </p>
+                    <p className="mt-1 text-sm text-zinc-400">
+                      {receita.clienteNome}
+                    </p>
+                  </div>
+
+                  <div className="relative">
+                    {openMenuId === receita.id && (
+                      <div className="absolute right-0 top-10 z-50 w-52 rounded-xl border border-[#222225] bg-[#09090B] p-2 shadow-xl">
+                        <button
+                          onClick={() => (
+                            setOpenMenuId(null),
+                            handleStatusChange(
+                              receita.id,
+                              ReceitaStatus.ATRASADO,
+                            )
+                          )}
+                          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[#A1A1AA] transition-all hover:bg-[#18181B] hover:text-white"
+                        >
+                          <AlertCircle size={18} className="text-rose-400" />
+                          Atrasado
+                        </button>
+                        <button
+                          onClick={() => (
+                            setOpenMenuId(null),
+                            handleStatusChange(
+                              receita.id,
+                              ReceitaStatus.AGUARDANDO,
+                            )
+                          )}
+                          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[#A1A1AA] transition-all hover:bg-[#18181B] hover:text-white"
+                        >
+                          <CircleDashed size={18} className="text-yellow-400" />
+                          Em andamento
+                        </button>
+                        <button
+                          onClick={() => (
+                            setOpenMenuId(null),
+                            handleStatusChange(
+                              receita.id,
+                              ReceitaStatus.RECEBIDO,
+                            )
+                          )}
+                          className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[#A1A1AA] transition-all hover:bg-[#18181B] hover:text-white"
+                        >
+                          <CheckCircle2
+                            size={18}
+                            className="text-emerald-500"
+                          />
+                          Concluído
+                        </button>
+                        <button
+                          onClick={() => (
+                            DeletarReceita(receita.id),
+                            setOpenMenuId(null)
+                          )}
+                          className="mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[#A1A1AA] transition-all hover:bg-[#18181B] hover:text-white"
+                        >
+                          <Ban size={18} className="text-red-500" />
+                          Excluir receita
+                        </button>
+                      </div>
+                    )}
+
+                    <button
+                      onClick={(e) => handleMenuToggle(receita.id, e)}
+                      className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-[#18181B]"
+                    >
+                      <EllipsisVertical size={18} className="text-[#939DAA]" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <span
+                    className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
+                      categoriaStyle[receita.categoria]
+                    }`}
+                  >
+                    {categoriaNome(receita.categoria)}
+                  </span>
+                  <span
+                    className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
+                      statusStyle[receita.receitaStatus]
+                    }`}
+                  >
+                    {statusNome(receita.receitaStatus)}
+                  </span>
+                </div>
+
+                <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                  <div>
+                    <p className="text-[#a1a1aa]">Valor</p>
+                    <p className="mt-1 font-bold text-green-400">
+                      +{" "}
+                      {receita.valor.toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      })}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-[#a1a1aa]">Data</p>
+                    <p className="mt-1 text-zinc-300">
+                      {new Date(receita.dataCriacao).toLocaleDateString(
+                        "pt-BR",
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
