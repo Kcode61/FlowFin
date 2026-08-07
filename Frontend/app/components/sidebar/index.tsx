@@ -12,7 +12,7 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export function Sidebar() {
@@ -51,7 +51,11 @@ export function Sidebar() {
 
     carregarUsuario();
   }, []);
-
+  const router = useRouter();
+  function handleLogout() {
+    localStorage.removeItem("token");
+    router.push("/Login");
+  }
   const menuLinks: {
     href: string;
     icon: React.ReactNode;
@@ -182,12 +186,12 @@ export function Sidebar() {
             </p>
           </div>
 
-          <Link
-            href="/login"
+          <button
+            onClick={handleLogout}
             className="text-[#8A93A3] transition-colors hover:text-[#EBCC15]"
           >
             <LogOut size={16} />
-          </Link>
+          </button>
         </div>
       </aside>
 
@@ -296,8 +300,8 @@ export function Sidebar() {
             </div>
 
             <Link
-              href="/login"
-              onClick={() => setIsOpen(false)}
+              href="/Login"
+              onClick={handleLogout}
               className="flex h-9 w-9 items-center justify-center rounded-xl text-[#8A93A3] transition-colors hover:bg-[#15171E] hover:text-[#EBCC15]"
             >
               <LogOut size={18} />
