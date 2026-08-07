@@ -111,6 +111,7 @@ export default function Home() {
   useEffect(() => {
     const carregarReceitasPendentes = async () => {
       try {
+        setIsLoading(true);
         const receitas = await listarReceitas();
 
         if (!receitas) return;
@@ -126,8 +127,11 @@ export default function Home() {
         );
 
         setReceitasPendentes(total);
-      } catch (error) {
-        console.error("Erro ao carregar receitas pendentes:", error);
+      } catch (err) {
+        console.error("Erro ao carregar receitas pendentes:", err);
+        setError(true);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -136,6 +140,7 @@ export default function Home() {
   useEffect(() => {
     const carregarTotalDespesas = async () => {
       try {
+        setIsLoading(true);
         const despesas = await listarDespesas();
         console.log("DESPESAS DASHBOARD:", despesas);
 
@@ -147,8 +152,11 @@ export default function Home() {
         );
 
         setTotalDespesas(total);
-      } catch (error) {
-        console.error("Erro ao carregar despesas:", error);
+      } catch (err) {
+        console.error("Erro ao carregar despesas:", err);
+        setError(true);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -157,6 +165,7 @@ export default function Home() {
   useEffect(() => {
     const carregarTotalReceitas = async () => {
       try {
+        setIsLoading(true);
         const receitas = await listarReceitas();
         console.log("Receitas DASHBOARD:", receitas);
 
@@ -168,8 +177,11 @@ export default function Home() {
         );
 
         setTotalReceitas(total);
-      } catch (error) {
-        console.error("Erro ao carregar receitas:", error);
+      } catch (err) {
+        console.error("Erro ao carregar receitas:", err);
+        setError(true);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -178,14 +190,18 @@ export default function Home() {
   useEffect(() => {
     const carregarTotalProjetos = async () => {
       try {
+        setIsLoading(true);
         const projetos = await listarProjetos();
 
         if (!projetos) return;
         const total = projetos.length;
 
         setTotalProjetos(total);
-      } catch (error) {
-        console.error("Erro ao carregar projetos:", error);
+      } catch (err) {
+        console.error("Erro ao carregar projetos:", err);
+        setError(true);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -194,13 +210,17 @@ export default function Home() {
   useEffect(() => {
     const carregarAnalisesDoAno = async () => {
       try {
+        setIsLoading(true);
         const dados = await listarAnalisesDoAno();
 
         if (!dados) return;
         console.log("DADOS DO GRÁFICO:", dados);
         setGrafico(dados);
-      } catch (error) {
-        console.error("Erro ao carregar Analises:", error);
+      } catch (err) {
+        console.error("Erro ao carregar Analises:", err);
+        setError(true);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -210,14 +230,18 @@ export default function Home() {
   useEffect(() => {
     const pagamentosPendentes = async () => {
       try {
+        setIsLoading(true);
         const projetos = await listarDespesas();
 
         if (!projetos) return;
         const total = projetos.length;
 
         setPagamentosPendentes(total);
-      } catch (error) {
-        console.error("Erro ao carregar pagamentos:", error);
+      } catch (err) {
+        console.error("Erro ao carregar pagamentos:", err);
+        setError(true);
+      } finally {
+        setIsLoading(false);
       }
     };
 

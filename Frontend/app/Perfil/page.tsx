@@ -18,16 +18,26 @@ export default function Perfil() {
 
     if (!confirmar) return;
 
-    const response = await deletarUsuario();
+    setIsLoading(true);
+    try {
+      const response = await deletarUsuario();
 
-    if (!response) {
+      if (!response) {
+        setError(true);
+        alert("Não foi possível excluir sua conta.");
+        return;
+      }
+
+      localStorage.removeItem("token");
+
+      router.push("/Login");
+    } catch (err) {
+      console.error("Erro ao deletar conta:", err);
+      setError(true);
       alert("Não foi possível excluir sua conta.");
-      return;
+    } finally {
+      setIsLoading(false);
     }
-
-    localStorage.removeItem("token");
-
-    router.push("/Login");
   }
   useEffect(() => {
     const carregarUsuario = async () => {

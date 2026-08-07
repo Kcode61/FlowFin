@@ -9,12 +9,13 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [Error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   async function fazerLogin(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(false);
-
+    setIsLoading(true);
     try {
       const token = await loginResponse(email, senha);
 
@@ -23,6 +24,8 @@ export default function Login() {
       router.push("/");
     } catch {
       setError(true);
+    } finally {
+      setIsLoading(false);
     }
   }
   useEffect(() => {
@@ -108,6 +111,7 @@ export default function Login() {
 
             <button
               type="submit"
+              disabled={isLoading}
               className="w-full h-12 cursor-pointer rounded-xl bg-[#F9C815] font-semibold text-[#09090B] transition hover:bg-[#ffd53b] mt-2"
             >
               Entrar

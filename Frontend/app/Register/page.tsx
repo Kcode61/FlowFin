@@ -9,12 +9,13 @@ export default function Register() {
   const [senha, setSenha] = useState("");
   const [nome, setNome] = useState("");
   const [Error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   async function fazerRegistro(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(false);
-
+    setIsLoading(true);
     try {
       await registrarResponse(email, senha, nome);
 
@@ -25,6 +26,8 @@ export default function Register() {
       router.push("/");
     } catch {
       setError(true);
+    } finally {
+      setIsLoading(false);
     }
   }
   useEffect(() => {
@@ -119,6 +122,7 @@ export default function Register() {
 
             <button
               type="submit"
+              disabled={isLoading}
               className="w-full h-12 cursor-pointer rounded-xl bg-[#F9C815] font-semibold text-[#09090B] transition hover:bg-[#ffd53b] mt-2"
             >
               Criar conta

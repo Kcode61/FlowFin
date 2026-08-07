@@ -46,6 +46,8 @@ function statusNome(p: ReceitaStatus) {
 
 export default function Receitas() {
   const [receitas, setReceitas] = useState<Receita[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [isOpen, setisOpen] = useState(false);
   const [descricao, setDescricao] = useState("");
   const [valor, setValor] = useState(0);
@@ -93,10 +95,18 @@ export default function Receitas() {
   ];
   useEffect(() => {
     async function carregarReceitas() {
-      const data = await listarReceitas();
-      console.log("RETORNO API:", data);
-      if (data) {
-        setReceitas(data);
+      try {
+        setIsLoading(true);
+        const data = await listarReceitas();
+        console.log("RETORNO API:", data);
+        if (data) {
+          setReceitas(data);
+        }
+      } catch (err) {
+        console.error(err);
+        setError(true);
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -141,30 +151,49 @@ export default function Receitas() {
   }
 
   async function DeletarReceita(receita_id: number) {
-    const ok = await deletarReceita(receita_id);
-    if (!ok) {
+    setIsLoading(true);
+    try {
+      const ok = await deletarReceita(receita_id);
+      if (!ok) {
+        setError(true);
+        alert("Erro ao excluir");
+        return;
+      }
+      setReceitas((prev) => prev.filter((d) => d.id !== receita_id));
+    } catch (err) {
+      console.error(err);
+      setError(true);
       alert("Erro ao excluir");
-      return;
+    } finally {
+      setIsLoading(false);
     }
-    setReceitas((prev) => prev.filter((d) => d.id !== receita_id));
   }
   async function handleStatusChange(id: number, status: ReceitaStatus) {
-    const receitaAtualizada = await atualizarReceita(id, status);
+    setIsLoading(true);
+    try {
+      const receitaAtualizada = await atualizarReceita(id, status);
 
-    if (!receitaAtualizada) {
-      console.error("Erro ao atualizar projeto");
-      return;
+      if (!receitaAtualizada) {
+        console.error("Erro ao atualizar projeto");
+        setError(true);
+        return;
+      }
+
+      setReceitas((receitasAnuais) =>
+        receitasAnuais.map((receita) =>
+          receita.id === id ? receitaAtualizada : receita,
+        ),
+      );
+    } catch (err) {
+      console.error(err);
+      setError(true);
+    } finally {
+      setIsLoading(false);
     }
-
-    setReceitas((receitasAnuais) =>
-      receitasAnuais.map((receita) =>
-        receita.id === id ? receitaAtualizada : receita,
-      ),
-    );
   }
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
+    setIsLoading(true);
     try {
       const receita = await adicionarReceita(
         descricao,
@@ -190,8 +219,11 @@ export default function Receitas() {
       setStatus(ReceitaStatus.RECEBIDO);
       setDataInicio("");
       setisOpen(false);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
+      setError(true);
+    } finally {
+      setIsLoading(false);
     }
   }
   const formularioValido =

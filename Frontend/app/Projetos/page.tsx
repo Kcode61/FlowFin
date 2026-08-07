@@ -19,6 +19,8 @@ import {
 
 export default function Projetos() {
   const [projetos, setProjetos] = useState<Projeto[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   const [descricao, setDescricao] = useState("");
@@ -68,6 +70,7 @@ export default function Projetos() {
   useEffect(() => {
     async function carregarProjetos() {
       try {
+        setIsLoading(true);
         const data = await listarProjetos();
 
         console.log("RETORNO API:", data);
@@ -75,8 +78,11 @@ export default function Projetos() {
         if (data) {
           setProjetos(data);
         }
-      } catch (error) {
-        console.error("Erro ao carregar projetos:", error);
+      } catch (err) {
+        console.error("Erro ao carregar projetos:", err);
+        setError(true);
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -86,6 +92,7 @@ export default function Projetos() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
+    setIsLoading(true);
     try {
       const projeto = await adicionarProjeto(
         nome,
@@ -112,32 +119,53 @@ export default function Projetos() {
       setPrazoFinalizacao("");
       setOpenStatus(false);
       setIsOpen(false);
-    } catch (error) {
-      console.error("Erro ao criar projeto:", error);
+    } catch (err) {
+      console.error("Erro ao criar projeto:", err);
+      setError(true);
+    } finally {
+      setIsLoading(false);
     }
   }
   async function handleStatusChange(id: number, status: ProjetoStatus) {
-    const projetoAtualizado = await atualizarProjeto(id, status);
+    setIsLoading(true);
+    try {
+      const projetoAtualizado = await atualizarProjeto(id, status);
 
-    if (!projetoAtualizado) {
-      console.error("Erro ao atualizar projeto");
-      return;
+      if (!projetoAtualizado) {
+        console.error("Erro ao atualizar projeto");
+        setError(true);
+        return;
+      }
+
+      setProjetos((projetosAtuais) =>
+        projetosAtuais.map((projeto) =>
+          projeto.id === id ? projetoAtualizado : projeto,
+        ),
+      );
+    } catch (err) {
+      console.error(err);
+      setError(true);
+    } finally {
+      setIsLoading(false);
     }
-
-    setProjetos((projetosAtuais) =>
-      projetosAtuais.map((projeto) =>
-        projeto.id === id ? projetoAtualizado : projeto,
-      ),
-    );
   }
   async function handleDelectProject(projeto_id: number) {
-    const ok = await deletarProjeto(projeto_id);
+    setIsLoading(true);
+    try {
+      const ok = await deletarProjeto(projeto_id);
 
-    if (!ok) {
-      console.error("Erro ao deletar projeto");
-      return;
+      if (!ok) {
+        console.error("Erro ao deletar projeto");
+        setError(true);
+        return;
+      }
+      setProjetos((prev) => prev.filter((d) => d.id !== projeto_id));
+    } catch (err) {
+      console.error(err);
+      setError(true);
+    } finally {
+      setIsLoading(false);
     }
-    setProjetos((prev) => prev.filter((d) => d.id !== projeto_id));
   }
   const inputDesign = `     h-12
     w-full

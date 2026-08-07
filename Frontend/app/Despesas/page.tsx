@@ -57,6 +57,8 @@ function pagamentoNome(p: DespesaPagamento) {
 
 export default function Despesas() {
   const [despesas, setDespesas] = useState<Despesa[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [isOpen, setisOpen] = useState(false);
   const [descricao, setDescricao] = useState("");
   const [valor, setValor] = useState(0);
@@ -111,25 +113,44 @@ export default function Despesas() {
   ];
   useEffect(() => {
     async function carregarDespesas() {
-      const data = await listarDespesas();
+      try {
+        setIsLoading(true);
+        const data = await listarDespesas();
 
-      if (data) {
-        setDespesas(data);
+        if (data) {
+          setDespesas(data);
+        }
+      } catch (err) {
+        console.error(err);
+        setError(true);
+      } finally {
+        setIsLoading(false);
       }
     }
 
     carregarDespesas();
   }, []);
   async function DeletarDespesas(despesa_id: number) {
-    const ok = await deletarDespesa(despesa_id);
-    if (!ok) {
+    setIsLoading(true);
+    try {
+      const ok = await deletarDespesa(despesa_id);
+      if (!ok) {
+        setError(true);
+        alert("Erro ao excluir");
+        return;
+      }
+      setDespesas((prev) => prev.filter((d) => d.id !== despesa_id));
+    } catch (err) {
+      console.error(err);
+      setError(true);
       alert("Erro ao excluir");
-      return;
+    } finally {
+      setIsLoading(false);
     }
-    setDespesas((prev) => prev.filter((d) => d.id !== despesa_id));
   }
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const despesa = await adicionarDespesa(
         descricao,
@@ -152,10 +173,14 @@ export default function Despesas() {
       setCategoria("IMPOSTO");
       setDataInicio("");
       setisOpen(false);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
+      setError(true);
+    } finally {
+      setIsLoading(false);
     }
   }
+
   const formularioValido =
     descricao.trim() !== "" &&
     valor > 0 &&
