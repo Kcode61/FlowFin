@@ -31,31 +31,47 @@ public class SecurityFilter extends OncePerRequestFilter {
     }
 
     private String recoverToken(HttpServletRequest request) {
-        String authHeader = request.getHeader("Authorization");
+    String authHeader = request.getHeader("Authorization");
 
-        if (authHeader == null) {
-            return null;
-        }
-
-        return authHeader.replace("Bearer ", "");
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        return null;
     }
+
+    return authHeader.substring(7);
+}
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = recoverToken(request);
+    protected void doFilterInternal(
+        HttpServletRequest request,
+        HttpServletResponse response,
+        FilterChain filterChain ) throws ServletException, IOException {
 
-        if (token != null && !token.isBlank()) {
-            String email = tokenService.validateToken(token);
-            if (email != null && !email.isBlank()) {
-                UserDetails user = userRepository.findByEmail(email);
-                if (user != null) {
-                    Authentication authentication =
-                            new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
+    String token = recoverToken(request);
+
+    if (token != null && !token.isBlank()) {
+
+        String email = tokenService.validateToken(token);
+
+        if (email != null && !email.isBlank()) {
+
+            UserDetails user = userRepository.findByEmail(email);
+
+            if (user != null) {
+
+                Authentication authentication =
+                        new UsernamePasswordAuthenticationToken(
+                                user,
+                                null,
+                                user.getAuthorities()
+                        );
+
+                SecurityContextHolder
+                        .getContext()
+                        .setAuthentication(authentication);
             }
         }
-
-        filterChain.doFilter(request, response);
     }
+
+    filterChain.doFilter(request, response);
+}
 }
