@@ -142,7 +142,6 @@ export default function Home() {
       try {
         setIsLoading(true);
         const despesas = await listarDespesas();
-        console.log("DESPESAS DASHBOARD:", despesas);
 
         if (!despesas) return;
 
@@ -167,7 +166,6 @@ export default function Home() {
       try {
         setIsLoading(true);
         const receitas = await listarReceitas();
-        console.log("Receitas DASHBOARD:", receitas);
 
         if (!receitas) return;
 

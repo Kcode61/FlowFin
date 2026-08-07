@@ -98,7 +98,7 @@ export default function Receitas() {
       try {
         setIsLoading(true);
         const data = await listarReceitas();
-        console.log("RETORNO API:", data);
+
         if (data) {
           setReceitas(data);
         }

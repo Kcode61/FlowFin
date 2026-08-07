@@ -73,8 +73,6 @@ export default function Projetos() {
         setIsLoading(true);
         const data = await listarProjetos();
 
-        console.log("RETORNO API:", data);
-
         if (data) {
           setProjetos(data);
         }
