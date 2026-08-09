@@ -1,5 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
+import {
+  adicionarListenerMudancaDeAuth,
+  removerListenerMudancaDeAuth,
+} from "@/app/utils/auth-events";
 import { Receita, ReceitaCategoria, ReceitaStatus, user } from "./types/user";
 import {
   ArrowUpRight,
@@ -271,6 +275,15 @@ export default function Home() {
     };
 
     carregarUsuario();
+
+    const handleAuthChange = () => {
+      carregarUsuario();
+    };
+
+    adicionarListenerMudancaDeAuth(handleAuthChange);
+    return () => {
+      removerListenerMudancaDeAuth(handleAuthChange);
+    };
   }, []);
 
   const router = useRouter();

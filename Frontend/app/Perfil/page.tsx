@@ -1,5 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
+import {
+  adicionarListenerMudancaDeAuth,
+  removerListenerMudancaDeAuth,
+} from "@/app/utils/auth-events";
 import { user } from "../types/user";
 import { Check, Mail, Shield, Trash2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -65,6 +69,15 @@ export default function Perfil() {
     };
 
     carregarUsuario();
+
+    const handleAuthChange = () => {
+      carregarUsuario();
+    };
+
+    adicionarListenerMudancaDeAuth(handleAuthChange);
+    return () => {
+      removerListenerMudancaDeAuth(handleAuthChange);
+    };
   }, []);
 
   return (

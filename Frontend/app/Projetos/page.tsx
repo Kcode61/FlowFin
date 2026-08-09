@@ -362,7 +362,7 @@ export default function Projetos() {
                   type="button"
                   onClick={handleSubmit}
                   disabled={!formularioValido}
-                  className={`flex w-full justify-center rounded-lg border px-3 py-2 text-left text-xs font-bold transition ${
+                  className={`flex w-full md:w-fit justify-center rounded-lg border px-3 py-2 text-left text-xs font-bold transition ${
                     formularioValido
                       ? "cursor-pointer border-[#F9C715] bg-[#F9C715] text-[#09090B]"
                       : "cursor-not-allowed border-zinc-700 bg-zinc-700 text-zinc-400"

@@ -2,6 +2,7 @@
 import { LogIn, Mail, Lock, User, UserCircle2 } from "lucide-react";
 import { type FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { emitirMudancaDeAuth } from "@/app/utils/auth-events";
 import { loginResponse, registrarResponse } from "../services/api";
 
 export default function Register() {
@@ -22,6 +23,7 @@ export default function Register() {
       const token = await loginResponse(email, senha);
 
       localStorage.setItem("token", token);
+      emitirMudancaDeAuth();
 
       router.push("/");
     } catch {

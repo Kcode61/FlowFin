@@ -2,6 +2,11 @@
 
 import { user } from "@/app/types/user";
 import {
+  adicionarListenerMudancaDeAuth,
+  emitirMudancaDeAuth,
+  removerListenerMudancaDeAuth,
+} from "@/app/utils/auth-events";
+import {
   FolderKanban,
   LogOut,
   Menu,
@@ -43,6 +48,7 @@ export function Sidebar() {
         const data = await response.json();
         setUsuario(data);
       } catch (error) {
+        setUsuario(null);
         setError(true);
       } finally {
         setIsLoading(false);
@@ -50,10 +56,20 @@ export function Sidebar() {
     };
 
     carregarUsuario();
+
+    const handleAuthChange = () => {
+      carregarUsuario();
+    };
+
+    adicionarListenerMudancaDeAuth(handleAuthChange);
+    return () => {
+      removerListenerMudancaDeAuth(handleAuthChange);
+    };
   }, []);
   const router = useRouter();
   function handleLogout() {
     localStorage.removeItem("token");
+    emitirMudancaDeAuth();
     router.push("/Login");
   }
   const menuLinks: {
