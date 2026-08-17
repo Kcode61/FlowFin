@@ -28,6 +28,15 @@ export function Sidebar() {
 
   useEffect(() => {
     const carregarUsuario = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setUsuario(null);
+        setError(false);
+        setIsLoading(false);
+        return;
+      }
+
       setIsLoading(true);
 
       try {
@@ -36,7 +45,7 @@ export function Sidebar() {
           {
             method: "GET",
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${token}`,
             },
           },
         );
@@ -66,6 +75,7 @@ export function Sidebar() {
       removerListenerMudancaDeAuth(handleAuthChange);
     };
   }, []);
+
   const router = useRouter();
   function handleLogout() {
     localStorage.removeItem("token");

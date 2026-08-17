@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 
 import "./globals.css";
-import { Sidebar } from "./components/sidebar";
+import { Shell } from "./components/shell";
 
 export const metadata: Metadata = {
   title: "FlowFin - Organize sua vida financeira",
-  description: "FlowFin e um site focado em controle financeiro para usuários",
+  description: "FlowFin e um site focado em controle financeira para usuários",
 };
 export const poppins = {
   subsets: ["latin"],
@@ -31,8 +31,7 @@ export default function RootLayout({
         className="h-screen flex lg:flex-row flex-col"
         cz-shortcut-listen="true"
       >
-        <Sidebar />
-        <main className="flex-1 "> {children}</main>
+        <Shell>{children}</Shell>
       </body>
     </html>
   );

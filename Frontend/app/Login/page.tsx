@@ -34,7 +34,7 @@ export default function Login() {
     const token = localStorage.getItem("token");
 
     if (token) {
-      router.push("/");
+      router.push("/Dashboard");
     }
   }, []);
   return (

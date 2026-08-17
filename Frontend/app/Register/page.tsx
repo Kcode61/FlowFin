@@ -25,7 +25,7 @@ export default function Register() {
       localStorage.setItem("token", token);
       emitirMudancaDeAuth();
 
-      router.push("/");
+      router.push("/Dashboard");
     } catch {
       setError(true);
     } finally {

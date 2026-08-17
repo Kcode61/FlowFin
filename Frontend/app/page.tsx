@@ -1,484 +1,131 @@
-"use client";
-import { useEffect, useState } from "react";
 import {
-  adicionarListenerMudancaDeAuth,
-  removerListenerMudancaDeAuth,
-} from "@/app/utils/auth-events";
-import { Receita, ReceitaCategoria, ReceitaStatus, user } from "./types/user";
-import {
+  ArrowRight,
   ArrowUpRight,
-  CalendarArrowDown,
-  Clock,
-  DollarSign,
-  LucideIcon,
+  BarChart3,
+  ChartColumn,
+  Check,
+  FolderCog2,
+  LayoutDashboardIcon,
+  LogIn,
+  LucideFolderKanban,
+  TrendingDown,
+  TrendingUp,
+  Users,
+  Wallet,
 } from "lucide-react";
-import {
-  listarAnalisesDoAno,
-  listarDespesas,
-  listarProjetos,
-  listarReceitas,
-} from "./services/api";
-import { DashboardStats } from "./components/StatCard";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-import { useRouter } from "next/navigation";
-type Grafico = {
-  mes: string;
-  receitas: number;
-  despesas: number;
-};
+import { StatusPreviewBox } from "./components/StatusPreviewBox";
 
 export default function Home() {
-  const [usuario, setUsuario] = useState<user | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [receitasPendentes, setReceitasPendentes] = useState(0);
-  const [totalDespesas, setTotalDespesas] = useState(0);
-  const [totalReceitas, setTotalReceitas] = useState(0);
-  const [totalProjetos, setTotalProjetos] = useState(0);
-  const [pagamentosPendentes, setPagamentosPendentes] = useState(0);
-  const [receitas, setReceitas] = useState<Receita[]>([]);
-
-  const [grafico, setGrafico] = useState<Grafico[]>([]);
-  useEffect(() => {
-    async function carregarReceitas() {
-      try {
-        setIsLoading(true);
-        const dados = await listarReceitas();
-
-        if (dados === false) {
-          setError(true);
-        } else {
-          setReceitas(dados);
-        }
-      } catch (err) {
-        setError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    carregarReceitas();
-  }, []);
-
-  function categoriaNome(categoria: ReceitaCategoria) {
-    switch (categoria) {
-      case ReceitaCategoria.CONSULTORIA:
-        return "Consultoria";
-      case ReceitaCategoria.RECORRENTE:
-        return "Recorrente";
-      case ReceitaCategoria.PROJETO:
-        return "Projeto";
-    }
-  }
-
-  function statusNome(p: ReceitaStatus) {
-    switch (p) {
-      case ReceitaStatus.RECEBIDO:
-        return "Recebido";
-      case ReceitaStatus.ATRASADO:
-        return "Atrasado";
-      case ReceitaStatus.AGUARDANDO:
-        return "Aguardando";
-    }
-  }
-  useEffect(() => {
-    async function carregarReceitas() {
-      try {
-        setIsLoading(true);
-        const dados = await listarReceitas();
-
-        if (dados === false) {
-          setError(true);
-        } else {
-          setReceitas(dados);
-        }
-      } catch (err) {
-        setError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    carregarReceitas();
-  }, []);
-
-  useEffect(() => {
-    const carregarReceitasPendentes = async () => {
-      try {
-        setIsLoading(true);
-        const receitas = await listarReceitas();
-
-        if (!receitas) return;
-
-        const total = receitas.reduce(
-          (acc: number, receita: { status: string }) => {
-            if (receita.status === "AGUARDANDO") {
-              return acc + 1;
-            }
-            return acc;
-          },
-          0,
-        );
-
-        setReceitasPendentes(total);
-      } catch (err) {
-        console.error("Erro ao carregar receitas pendentes:", err);
-        setError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    carregarReceitasPendentes();
-  }, []);
-  useEffect(() => {
-    const carregarTotalDespesas = async () => {
-      try {
-        setIsLoading(true);
-        const despesas = await listarDespesas();
-
-        if (!despesas) return;
-
-        const total = despesas.reduce(
-          (acc: number, despesa: { valor: number }) => acc + despesa.valor,
-          0,
-        );
-
-        setTotalDespesas(total);
-      } catch (err) {
-        console.error("Erro ao carregar despesas:", err);
-        setError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    carregarTotalDespesas();
-  }, []);
-  useEffect(() => {
-    const carregarTotalReceitas = async () => {
-      try {
-        setIsLoading(true);
-        const receitas = await listarReceitas();
-
-        if (!receitas) return;
-
-        const total = receitas.reduce(
-          (acc: number, receita: { valor: number }) => acc + receita.valor,
-          0,
-        );
-
-        setTotalReceitas(total);
-      } catch (err) {
-        console.error("Erro ao carregar receitas:", err);
-        setError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    carregarTotalReceitas();
-  }, []);
-  useEffect(() => {
-    const carregarTotalProjetos = async () => {
-      try {
-        setIsLoading(true);
-        const projetos = await listarProjetos();
-
-        if (!projetos) return;
-        const total = projetos.length;
-
-        setTotalProjetos(total);
-      } catch (err) {
-        console.error("Erro ao carregar projetos:", err);
-        setError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    carregarTotalProjetos();
-  }, []);
-  useEffect(() => {
-    const carregarAnalisesDoAno = async () => {
-      try {
-        setIsLoading(true);
-        const dados = await listarAnalisesDoAno();
-
-        if (!dados) return;
-        console.log("DADOS DO GRÁFICO:", dados);
-        setGrafico(dados);
-      } catch (err) {
-        console.error("Erro ao carregar Analises:", err);
-        setError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    carregarAnalisesDoAno();
-  }, []);
-
-  useEffect(() => {
-    const pagamentosPendentes = async () => {
-      try {
-        setIsLoading(true);
-        const projetos = await listarDespesas();
-
-        if (!projetos) return;
-        const total = projetos.length;
-
-        setPagamentosPendentes(total);
-      } catch (err) {
-        console.error("Erro ao carregar pagamentos:", err);
-        setError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    pagamentosPendentes();
-  }, []);
-  useEffect(() => {
-    const carregarUsuario = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/me`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          },
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch user data");
-        }
-        const data = await response.json();
-        setUsuario(data);
-      } catch (error) {
-        setError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    carregarUsuario();
-
-    const handleAuthChange = () => {
-      carregarUsuario();
-    };
-
-    adicionarListenerMudancaDeAuth(handleAuthChange);
-    return () => {
-      removerListenerMudancaDeAuth(handleAuthChange);
-    };
-  }, []);
-
-  const router = useRouter();
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      router.push("/Login");
-    }
-  }, []);
-  const receitasAguardando = receitas.filter(
-    (receita) => receita.receitaStatus === ReceitaStatus.AGUARDANDO,
-  );
-  const receitasRecebidas = receitas.filter(
-    (receita) => receita.receitaStatus === ReceitaStatus.RECEBIDO,
-  );
   return (
-    <section className="py-10 px-4 bg-[#09090B] overflow-y-auto h-full ">
+    <section className="py-32 px-4 bg-[#09090B] overflow-y-auto h-full ">
       <div className="max-w-7xl mx-auto">
-        <div>
-          <h1 className="text-2xl font-bold font-poppins text-white">
-            Dashboard
-          </h1>
-          <p className="text-gray-500 text-sm font-inter font-medium">
-            Visão geral das suas finanças
-          </p>
-        </div>
-        <div className="py-10">
-          <DashboardStats
-            totalReceitas={totalReceitas}
-            totalDespesas={totalDespesas}
-            totalContasReceber={receitasPendentes}
-            totalProjetosAtivos={totalProjetos}
-            pagamentosPendentes={pagamentosPendentes}
-          />
-        </div>
-
-        <div className="h-96 w-full rounded-2xl border border-zinc-800 bg-[#0c0c0e] p-6">
-          <h2 className="mb-4 text-xl font-poppins font-bold text-white">
-            Receitas vs Despesas de 2026
-          </h2>
-
-          <ResponsiveContainer width="100%" height="85%">
-            <AreaChart
-              data={grafico}
-              margin={{
-                top: 10,
-                right: 10,
-                left: -10,
-                bottom: 0,
-              }}
-            >
-              <defs>
-                <linearGradient id="receitasGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#eab308" stopOpacity={0.45} />
-                  <stop offset="100%" stopColor="#eab308" stopOpacity={0.0} />
-                </linearGradient>
-
-                <linearGradient id="despesasGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#ef4444" stopOpacity={0.45} />
-                  <stop offset="100%" stopColor="#ef4444" stopOpacity={0.0} />
-                </linearGradient>
-              </defs>
-
-              <CartesianGrid
-                stroke="#27272a"
-                strokeDasharray="2 2"
-                vertical={true}
-                horizontal={true}
-              />
-
-              <XAxis
-                dataKey="mes"
-                tick={{ fill: "#a1a1aa", fontSize: 14 }}
-                tickLine={false}
-                axisLine={{ stroke: "#27272a" }}
-                dy={10}
-              />
-
-              <YAxis
-                tickFormatter={(v) => `R$${v / 1000}k`}
-                tick={{ fill: "#a1a1aa", fontSize: 14 }}
-                tickLine={false}
-                axisLine={{ stroke: "#27272a" }}
-                domain={[0, 28000]}
-                ticks={[0, 7000, 14000, 21000, 28000]}
-              />
-
-              <Tooltip
-                contentStyle={{
-                  background: "#18181b",
-                  border: "1px solid #27272a",
-                  borderRadius: "8px",
-                  color: "#fff",
-                }}
-              />
-
-              <Area
-                type="monotone"
-                dataKey="receitas"
-                stroke="#facc15"
-                strokeWidth={2.5}
-                fillOpacity={1}
-                fill="url(#receitasGrad)"
-                dot={false}
-                activeDot={{ r: 5, fill: "#facc15" }}
-              />
-
-              <Area
-                type="monotone"
-                dataKey="despesas"
-                stroke="#ef4444"
-                strokeWidth={2.5}
-                fillOpacity={1}
-                fill="url(#despesasGrad)"
-                dot={false}
-                activeDot={{ r: 5, fill: "#EF4444" }}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </div>
-        <div className="py-10 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-6 h-96 overflow-y-auto border col-span-2 bg-[#0E0E11] border-[#222225] rounded-2xl">
-            <h2 className="mb-4 text-lg flex gap-2 items-center font-poppins font-bold text-white">
-              <DollarSign className="text-yellow-400" size={18} />
-              Últimas receitas
-            </h2>
-            {receitas.length > 0 ? (
-              <ul>
-                {receitasRecebidas.map((receita) => (
-                  <div
-                    key={receita.id}
-                    className="flex items-center gap-3 py-2.5 border-b border-border last:border-0"
-                  >
-                    <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-green-500/10 text-green-500">
-                      <ArrowUpRight className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-white truncate">
-                        Pagamento {statusNome(receita.receitaStatus)} -
-                        {categoriaNome(receita.categoria)}
-                      </p>
-                      <p className="text-xs text-white">
-                        {receita.dataCriacao}
-                      </p>
-                    </div>
-                    <span className="text-sm font-semibold text-green-500">
-                      +R$ {receita.valor.toFixed(2)}
-                    </span>
-                  </div>
-                ))}
-              </ul>
-            ) : (
-              <div className="flex  items-center justify-center text-center">
-                <p className="text-sm font-medium mt-22 font-inter text-[#A1A1AA]">
-                  Você ainda não possui nenhuma receita registrada
+        <div className="grid max-w-6xl mx-auto grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="flex flex-col gap-2">
+            <span className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-[#27272a] bg-[#0f0f12] px-4 py-1.5 text-xs font-medium text-[#a1a1aa]">
+              <BarChart3 className="h-3.5 w-3.5 text-[#facc15]" />
+              Gestão financeira para freelancers
+            </span>
+            <h1 className="text-4xl mb-4 md:text-6xl text-white font-poppins font-bold ">
+              Suas finanças,{" "}
+              <span className="text-yellow-400">sob controle.</span>
+            </h1>
+            <p className="text-xl max-w-xl mb-4 text-[#A2A1AA] font-medium font-inter">
+              O FlowFin reúne receitas, despesas, projetos e metas em um só
+              lugar. Simples, rápido e feito pra quem trabalha por conta
+              própria.
+            </p>
+            <div className="flex flex-col md:flex-row gap-4 ">
+              <button className="py-4 px-8 rounded-xl cursor-pointer flex gap-4 items-center bg-[#F9C715]  group text-[#09090B] font-poppins font-bold hover:scale-95 transition ease duration-300">
+                Criar conta grátis
+                <ArrowRight
+                  size={17}
+                  className="group-hover:-translate-x-2 transition-all ease-out duration-500"
+                />
+              </button>
+              <button className="py-4 px-8 hover:bg-[#F9C715]/80   rounded-xl cursor-pointer flex gap-4 hover:text-[#09090B] hover:border-transparent items-center bg-transparent border border-[#27272A]  group text-white font-poppins font-bold hover:scale-95 transition ease duration-300">
+                Já tenho conta
+              </button>
+            </div>
+          </div>
+          <div className="p-6 rounded-2xl bg-[#0E0D11] border border-[#27272A] flex flex-col gap-4">
+            <div className="flex mb-4 justify-between ">
+              <div className="flex flex-col">
+                <p className="text-xs text-[#9A8E91]">
+                  O que você vai poder fazer
+                </p>
+                <p className="text-sm font-bold text-white font-poppins">
+                  Tudo em um só lugar
                 </p>
               </div>
-            )}
-          </div>
-          <div className="p-6 h-96 overflow-y-auto border  bg-[#0E0E11] border-[#222225] rounded-2xl">
-            <h2 className="mb-4 flex gap-2 items-center text-lg font-poppins font-bold text-white">
-              <CalendarArrowDown className="text-yellow-400" size={18} />{" "}
-              Próximos pagamentos
-            </h2>
-            {receitasAguardando.length > 0 ? (
-              <ul>
-                {receitasAguardando.map((receita) => (
-                  <div
-                    key={receita.id}
-                    className="flex items-center gap-4 text-sm"
-                  >
-                    <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-yellow-500/10 text-yellow-500">
-                      <Clock className="w-4 h-4" />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <span className="truncate text-white text-sm mr-2">
-                        Pagamento pendente - {categoriaNome(receita.categoria)}
-                      </span>
-                      <span className="font-semibold text-xs text-white">
-                        R$ {receita.valor.toFixed(2)}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </ul>
-            ) : (
-              <div className="flex  items-center justify-center text-center">
-                <p className="text-sm font-medium mt-22 font-inter text-[#A1A1AA]">
-                  Você ainda não possui nenhuma pagamento proximo
-                </p>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#261F10] text-[#F9C715]">
+                <LayoutDashboardIcon
+                  size={24}
+                  absoluteStrokeWidth
+                  className="fill-[#F9C715]"
+                />
               </div>
-            )}
+            </div>
+            <div className="py-4 px-6 rounded-2xl bg-[#09090B] border border-[#222225] flex items-center justify-between">
+              <div className="flex gap-4 items-center">
+                <div className="w-10 flex rounded-xl items-center justify-center bg-[#211B0B] text-[#E8BA14] h-10 ">
+                  <TrendingUp size={20} />
+                </div>
+                <div className="flex flex-col">
+                  <p className="text-sm text-white font-semibold font-poppins ">
+                    Registrar receitas
+                  </p>
+                  <p className="text-xs font-medium font-inter text-[#9A8E91]">
+                    Por projeto, cliente e categoria
+                  </p>
+                </div>
+              </div>
+
+              <Check size={18} className="text-[#E8BA14]" absoluteStrokeWidth />
+            </div>
+            <div className="py-4 px-6 rounded-2xl bg-[#09090B] border border-[#222225] flex items-center justify-between">
+              <div className="flex gap-4 items-center">
+                <div className="w-10 flex rounded-xl items-center justify-center bg-[#211B0B] text-[#E8BA14] h-10 ">
+                  <TrendingDown size={20} />
+                </div>
+                <div className="flex flex-col">
+                  <p className="text-sm text-white font-semibold font-poppins ">
+                    Controlar despesas
+                  </p>
+                  <p className="text-xs font-medium font-inter text-[#9A8E91]">
+                    Recorrentes e pontuais
+                  </p>
+                </div>
+              </div>
+
+              <Check size={18} className="text-[#E8BA14]" absoluteStrokeWidth />
+            </div>
+            <div className="py-4 px-6 rounded-2xl bg-[#09090B] border border-[#222225] flex items-center justify-between">
+              <div className="flex gap-4 items-center">
+                <div className="w-10 flex rounded-xl items-center justify-center bg-[#211B0B] text-[#E8BA14] h-10 ">
+                  <LucideFolderKanban size={20} />
+                </div>
+                <div className="flex flex-col">
+                  <p className="text-sm text-white font-semibold font-poppins ">
+                    Gerir projetos
+                  </p>
+                  <p className="text-xs font-medium font-inter text-[#9A8E91]">
+                    Status, valor e progresso
+                  </p>
+                </div>
+              </div>
+
+              <Check size={18} className="text-[#E8BA14]" absoluteStrokeWidth />
+            </div>
+            <div className="w-full mb-2 mt-2 bg-[#222225] h-px"></div>
+            <div className="flex gap-2 items-center">
+              <Users size={15} className="text-[#E8BA14]" />
+              <p className="text-xs font-inter text-[#9A8E91] ">
+                Cadastre seus clientes e vincule aos projetos
+              </p>
+            </div>
           </div>
         </div>
+        <StatusPreviewBox />
       </div>
     </section>
   );
