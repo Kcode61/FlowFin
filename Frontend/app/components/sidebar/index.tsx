@@ -88,7 +88,7 @@ export function Sidebar() {
     label: string;
   }[] = [
     {
-      href: "/",
+      href: "/Dashboard",
       icon: <WalletIcon className="w-5 h-5" />,
       label: "Dashboard",
     },
@@ -115,6 +115,10 @@ export function Sidebar() {
   ];
 
   const pathname = usePathname();
+
+  if (pathname === "/") {
+    return null;
+  }
 
   if (isLoading) {
     return (
