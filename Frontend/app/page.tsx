@@ -18,6 +18,8 @@ import { StatusPreviewBox } from "./components/StatusPreviewBox";
 import { HandToolsSection } from "./components/handToolsSection";
 import { StartedSection } from "./components/StartedSection";
 import { Header } from "./components/Header";
+import Link from "next/link";
+import { CtaSection } from "./components/CtaSection";
 
 export default function Home() {
   return (
@@ -41,16 +43,22 @@ export default function Home() {
                 própria.
               </p>
               <div className="flex flex-col md:flex-row gap-4 ">
-                <button className="py-4 px-8 rounded-xl cursor-pointer flex gap-4 items-center bg-[#F9C715]  group text-[#09090B] font-poppins font-bold hover:scale-95 transition ease duration-300">
+                <Link
+                  href="/Register"
+                  className="py-4 px-8 rounded-xl cursor-pointer flex gap-4 items-center bg-[#F9C715]  group text-[#09090B] font-poppins font-bold hover:scale-95 transition ease duration-300"
+                >
                   Criar conta grátis
                   <ArrowRight
                     size={17}
                     className="group-hover:-translate-x-2 transition-all ease-out duration-500"
                   />
-                </button>
-                <button className="py-4 px-8 hover:bg-[#F9C715]/80   rounded-xl cursor-pointer flex gap-4 hover:text-[#09090B] hover:border-transparent items-center bg-transparent border border-[#27272A]  group text-white font-poppins font-bold hover:scale-95 transition ease duration-300">
+                </Link>
+                <Link
+                  href="/Login"
+                  className="py-4 px-8 hover:bg-[#F9C715]/80   rounded-xl cursor-pointer flex gap-4 hover:text-[#09090B] hover:border-transparent items-center bg-transparent border border-[#27272A]  group text-white font-poppins font-bold hover:scale-95 transition ease duration-300"
+                >
                   Já tenho conta
-                </button>
+                </Link>
               </div>
             </div>
             <div className="p-6 rounded-2xl bg-[#0E0D11] border border-[#27272A] flex flex-col gap-4">
@@ -146,6 +154,7 @@ export default function Home() {
           <StatusPreviewBox />
           <HandToolsSection />
           <StartedSection />
+          <CtaSection />
         </div>
       </section>
     </>
