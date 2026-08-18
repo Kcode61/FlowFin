@@ -100,23 +100,6 @@ export function StatusPreviewBox() {
 
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-white truncate">
-                    Pagamento Recebido - Venda
-                  </p>
-                  <p className="text-xs text-white">12/08/2026</p>
-                </div>
-
-                <span className="text-sm font-semibold text-green-500">
-                  +R$ 320,00
-                </span>
-              </div>
-
-              <div className="flex items-center gap-3 py-2.5 border-b border-[#222225] last:border-0">
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-green-500/10 text-green-500">
-                  <ArrowUpRight className="w-4 h-4" />
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-white truncate">
                     Pagamento Recebido - Investimento
                   </p>
                   <p className="text-xs text-white">08/08/2026</p>

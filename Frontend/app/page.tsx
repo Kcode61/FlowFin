@@ -5,6 +5,7 @@ import {
   ChartColumn,
   Check,
   FolderCog2,
+  Hand,
   LayoutDashboardIcon,
   LogIn,
   LucideFolderKanban,
@@ -14,6 +15,7 @@ import {
   Wallet,
 } from "lucide-react";
 import { StatusPreviewBox } from "./components/StatusPreviewBox";
+import { HandToolsSection } from "./components/handToolsSection";
 
 export default function Home() {
   return (
@@ -126,6 +128,7 @@ export default function Home() {
           </div>
         </div>
         <StatusPreviewBox />
+        <HandToolsSection />
       </div>
     </section>
   );
