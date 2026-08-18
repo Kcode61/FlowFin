@@ -20,12 +20,13 @@ import { StartedSection } from "./components/StartedSection";
 import { Header } from "./components/Header";
 import Link from "next/link";
 import { CtaSection } from "./components/CtaSection";
+import { Footer } from "./components/Footer";
 
 export default function Home() {
   return (
     <>
       <Header />
-      <section className="py-32 px-4 bg-[#09090B] overflow-y-auto h-full ">
+      <section className="pt-32 pb-5 px-4 bg-[#09090B] overflow-y-auto h-full ">
         <div className="max-w-7xl mx-auto">
           <div className="grid max-w-6xl mx-auto grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex flex-col gap-2">
@@ -156,6 +157,7 @@ export default function Home() {
           <StartedSection />
           <CtaSection />
         </div>
+        <Footer />
       </section>
     </>
   );
