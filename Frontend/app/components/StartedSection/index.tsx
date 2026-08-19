@@ -3,10 +3,10 @@ export function StartedSection() {
     <section className="py-22 border-t border-[#19181A] ">
       <div className="max-w-7xl mx-auto">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-4xl text-white mb-6 font-bold font-poppins">
+          <h2 className="md:text-4xl text-3xl text-white mb-6 font-bold font-poppins">
             Comece em 3 passos
           </h2>
-          <p className=" text-[#9A8E91] font-inter">
+          <p className=" text-[#9A8E91] text-sm md:text-base max-w-75 md:max-w-none mx-auto font-inter">
             Sem complicação. Em poucos minutos você já está no controle.
           </p>
         </div>

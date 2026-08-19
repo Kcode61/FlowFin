@@ -12,10 +12,10 @@ export function HandToolsSection() {
     <section className="py-22 border-t border-[#19181A] ">
       <div className="max-w-7xl mx-auto">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-4xl text-white mb-6 font-bold font-poppins">
+          <h2 className="md:text-4xl text-3xl text-white mb-6 font-bold font-poppins">
             Tudo que você precisa pra gerir o dinheiro
           </h2>
-          <p className=" text-[#9A8E91] font-inter">
+          <p className=" text-[#9A8E91] text-sm md:text-base max-w-75 md:max-w-none mx-auto font-inter">
             Ferramentas pensadas pra quem é freelancer e precisa de clareza nas
             finanças.
           </p>

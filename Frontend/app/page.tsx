@@ -26,7 +26,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <section className="pt-32 pb-5 px-4 bg-[#09090B] overflow-y-auto h-full ">
+      <section className="pt-32 md:pb-5 px-4 bg-[#09090B] overflow-y-auto h-full ">
         <div className="max-w-7xl mx-auto">
           <div className="grid max-w-6xl mx-auto grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex flex-col gap-2">
@@ -34,11 +34,11 @@ export default function Home() {
                 <BarChart3 className="h-3.5 w-3.5 text-[#facc15]" />
                 Gestão financeira para freelancers
               </span>
-              <h1 className="text-4xl mb-4 md:text-6xl text-white font-poppins font-bold ">
+              <h1 className="text-5xl mb-4 md:text-6xl text-white font-poppins font-bold ">
                 Suas finanças,{" "}
                 <span className="text-yellow-400">sob controle.</span>
               </h1>
-              <p className="text-xl max-w-xl mb-4 text-[#A2A1AA] font-medium font-inter">
+              <p className="text-lg md:text-xl max-w-xl mb-4 text-[#A2A1AA] font-medium font-inter">
                 O FlowFin reúne receitas, despesas, projetos e metas em um só
                 lugar. Simples, rápido e feito pra quem trabalha por conta
                 própria.
@@ -46,7 +46,7 @@ export default function Home() {
               <div className="flex flex-col md:flex-row gap-4 ">
                 <Link
                   href="/Register"
-                  className="py-4 px-8 rounded-xl cursor-pointer flex gap-4 items-center bg-[#F9C715]  group text-[#09090B] font-poppins font-bold hover:scale-95 transition ease duration-300"
+                  className="md:py-4 py-3 px-6 text-sm md:text-base md:px-8 justify-center md:justify-start rounded-xl cursor-pointer flex gap-4 items-center bg-[#F9C715]  group text-[#09090B] font-poppins font-bold hover:scale-95 transition ease duration-300"
                 >
                   Criar conta grátis
                   <ArrowRight
@@ -56,7 +56,7 @@ export default function Home() {
                 </Link>
                 <Link
                   href="/Login"
-                  className="py-4 px-8 hover:bg-[#F9C715]/80   rounded-xl cursor-pointer flex gap-4 hover:text-[#09090B] hover:border-transparent items-center bg-transparent border border-[#27272A]  group text-white font-poppins font-bold hover:scale-95 transition ease duration-300"
+                  className="md:py-4 py-3 px-6 text-sm md:text-base justify-center md:justify-start hover:bg-[#F9C715]/80   rounded-xl cursor-pointer flex gap-4 hover:text-[#09090B] hover:border-transparent items-center bg-transparent border border-[#27272A]  group text-white font-poppins font-bold hover:scale-95 transition ease duration-300"
                 >
                   Já tenho conta
                 </Link>

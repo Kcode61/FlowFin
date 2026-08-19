@@ -119,6 +119,12 @@ export function Sidebar() {
   if (pathname === "/") {
     return null;
   }
+  if (pathname === "/Login") {
+    return null;
+  }
+  if (pathname === "/Register") {
+    return null;
+  }
 
   if (isLoading) {
     return (
