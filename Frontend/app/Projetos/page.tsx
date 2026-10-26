@@ -389,7 +389,7 @@ export default function Projetos() {
 
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="flex justify-center lg:justify-normal cursor-pointer items-center gap-2 rounded-xl bg-[#FACC15] px-4 py-3 text-sm font-medium text-[#201A06] transition hover:brightness-95"
+              className="flex w-fit ml-auto cursor-pointer items-center gap-2 bg-[#FACC15] hover:brightness-95 transition rounded-xl px-4 py-3 text-[#201A06] font-medium text-sm"
             >
               <Plus size={17} />
               Novo Projeto
