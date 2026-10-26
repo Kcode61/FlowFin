@@ -28,7 +28,7 @@ export default function RootLayout({
       className={`h-full antialiased ${poppins.variable} font-inter`}
     >
       <body
-        className="h-screen flex lg:flex-row flex-col"
+        className="h-screen flex bg-[#09090B] lg:flex-row flex-col"
         cz-shortcut-listen="true"
       >
         <Shell>{children}</Shell>

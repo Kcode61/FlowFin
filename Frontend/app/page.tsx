@@ -26,7 +26,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <section className="pt-32 md:pb-5 px-4 bg-[#09090B] overflow-y-auto h-full ">
+      <section className="pt-32 md:pb-5 px-4 bg-[#09090B] h-full ">
         <div className="max-w-7xl mx-auto">
           <div className="grid max-w-6xl mx-auto grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex flex-col gap-2">
