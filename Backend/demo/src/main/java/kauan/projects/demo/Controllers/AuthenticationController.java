@@ -3,6 +3,7 @@ package kauan.projects.demo.Controllers;
 import jakarta.validation.Valid;
 import kauan.projects.demo.Domain.DTOS.AuthenticationDTO;
 import kauan.projects.demo.Domain.DTOS.RegisterDTO;
+import kauan.projects.demo.Domain.ENUMS.Cargo;
 import kauan.projects.demo.Domain.User;
 import kauan.projects.demo.Domain.UserRepository;
 import kauan.projects.demo.Security.TokenService;
@@ -50,7 +51,7 @@ public class AuthenticationController {
     public ResponseEntity register(@RequestBody @Valid RegisterDTO data) {
         if (this.userRepository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
         String encryptedPassword = passwordEncoder.encode(data.password());
-        User newUser = new User(data.email(), encryptedPassword, data.role(), data.name());
+        User newUser = new User(data.email(), encryptedPassword, Cargo.USER, data.name());
         this.userRepository.save(newUser);
         return ResponseEntity.ok().build();
     }

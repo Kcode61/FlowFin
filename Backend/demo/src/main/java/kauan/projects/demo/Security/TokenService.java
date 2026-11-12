@@ -9,6 +9,9 @@ import kauan.projects.demo.Domain.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.Instant;
+
 @Service
 public class TokenService {
     @Value("${api.security.token.secret}")
@@ -19,6 +22,7 @@ public class TokenService {
         return JWT.create()
                 .withIssuer("auth-admin")
                 .withSubject(user.getEmail())
+                .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
                 .sign(algorithm);
     }
 
