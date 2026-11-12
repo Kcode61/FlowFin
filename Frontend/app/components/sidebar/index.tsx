@@ -161,19 +161,33 @@ export function Sidebar() {
 
   return (
     <>
-      <aside className="hidden h-full w-64 flex-col border-r border-[#222225] bg-[#09090B] py-5 lg:flex">
-        <div className="flex items-center gap-4 px-4">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FACC15]">
-            <WalletIcon
-              absoluteStrokeWidth
-              className="h-6 w-6 text-[#09090B]"
-            />
-          </div>
+      <aside className="hidden h-full w-64 flex-col border-r border-[#222225] bg-[#09090B] pb-5  lg:flex">
+        <div className="flex h-20 items-center px-4">
+          <Link
+            href="/Dashboard"
+            aria-label="FlowFin, ir para o dashboard"
+            className="group relative flex h-14 w-full items-center overflow-hidden rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FACC15] focus-visible:ring-offset-2 focus-visible:ring-offset-[#09090B]"
+          >
+            <h2 className="absolute left-0 top-1/2 -translate-y-1/2 font-poppins text-lg font-bold text-white transition-all duration-300 ease-out group-hover:-translate-x-2 group-hover:opacity-0 group-focus-visible:-translate-x-2 group-focus-visible:opacity-0">
+              Flow<span className="text-[#FACC15]">Fin</span>
+            </h2>
 
-          <h2 className="font-poppins text-lg font-bold text-white">FlowFin</h2>
+            <div className="absolute left-full top-1/2 flex h-10 w-10 -translate-x-full -translate-y-1/2 items-center justify-center rounded-lg bg-[#FACC15] transition-all duration-700 ease-in-out group-hover:left-0 group-hover:translate-x-0 group-focus-visible:left-0 group-focus-visible:translate-x-0">
+              <WalletIcon className="h-5 w-5 text-[#09090B]" />
+            </div>
+
+            <div className="absolute left-12 top-1/2 min-w-0 -translate-y-1/2 translate-x-2 opacity-0 transition-all delay-0 duration-500 ease-out group-hover:delay-300 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:delay-300 group-focus-visible:translate-x-0 group-focus-visible:opacity-100">
+              <h2 className="truncate font-poppins text-sm font-bold leading-tight text-white">
+                Flow Financeiro
+              </h2>
+              <p className="mt-1 truncate text-[11px] text-[#8A93A3]">
+                Seu fluxo, sob controle.
+              </p>
+            </div>
+          </Link>
         </div>
 
-        <div className="mb-4 mt-4 h-px w-full bg-[#222225]" />
+        <div className="mb-4 h-px w-full bg-[#222225]" />
 
         <div className="flex-1 px-4">
           <nav>
