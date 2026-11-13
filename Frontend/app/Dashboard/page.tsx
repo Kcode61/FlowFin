@@ -41,11 +41,9 @@ export default function Dashboard() {
   const [usuario, setUsuario] = useState<user | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [receitasPendentes, setReceitasPendentes] = useState(0);
   const [totalDespesas, setTotalDespesas] = useState(0);
   const [totalReceitas, setTotalReceitas] = useState(0);
   const [totalProjetos, setTotalProjetos] = useState(0);
-  const [pagamentosPendentes, setPagamentosPendentes] = useState(0);
   const [receitas, setReceitas] = useState<Receita[]>([]);
 
   const [grafico, setGrafico] = useState<Grafico[]>([]);
@@ -112,35 +110,6 @@ export default function Dashboard() {
     carregarReceitas();
   }, []);
 
-  useEffect(() => {
-    const carregarReceitasPendentes = async () => {
-      try {
-        setIsLoading(true);
-        const receitas = await listarReceitas();
-
-        if (!receitas) return;
-
-        const total = receitas.reduce(
-          (acc: number, receita: { status: string }) => {
-            if (receita.status === "AGUARDANDO") {
-              return acc + 1;
-            }
-            return acc;
-          },
-          0,
-        );
-
-        setReceitasPendentes(total);
-      } catch (err) {
-        console.error("Erro ao carregar receitas pendentes:", err);
-        setError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    carregarReceitasPendentes();
-  }, []);
   useEffect(() => {
     const carregarTotalDespesas = async () => {
       try {
@@ -230,26 +199,6 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    const pagamentosPendentes = async () => {
-      try {
-        setIsLoading(true);
-        const projetos = await listarDespesas();
-
-        if (!projetos) return;
-        const total = projetos.length;
-
-        setPagamentosPendentes(total);
-      } catch (err) {
-        console.error("Erro ao carregar pagamentos:", err);
-        setError(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    pagamentosPendentes();
-  }, []);
-  useEffect(() => {
     const carregarUsuario = async () => {
       setIsLoading(true);
       try {
@@ -300,6 +249,13 @@ export default function Dashboard() {
   const receitasRecebidas = receitas.filter(
     (receita) => receita.receitaStatus === ReceitaStatus.RECEBIDO,
   );
+  const receitasAtrasadas = receitas.filter(
+    (receita) => receita.receitaStatus === ReceitaStatus.ATRASADO,
+  );
+  const totalReceitasAtrasadas = receitasAtrasadas.reduce(
+    (total, receita) => total + receita.valor,
+    0,
+  );
   return (
     <section className="py-10 px-4 bg-[#09090B] overflow-y-auto h-full ">
       <div className="max-w-7xl mx-auto">
@@ -315,9 +271,9 @@ export default function Dashboard() {
           <DashboardStats
             totalReceitas={totalReceitas}
             totalDespesas={totalDespesas}
-            totalContasReceber={receitasPendentes}
             totalProjetosAtivos={totalProjetos}
-            pagamentosPendentes={pagamentosPendentes}
+            totalReceitasAtrasadas={totalReceitasAtrasadas}
+            quantidadeReceitasAtrasadas={receitasAtrasadas.length}
           />
         </div>
 

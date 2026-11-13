@@ -65,19 +65,17 @@ const localdate = new Date().toLocaleDateString("pt-BR", {
 interface DashboardStatsProps {
   totalReceitas?: number;
   totalDespesas?: number;
-  totalContasReceber?: number;
   totalProjetosAtivos?: number;
-  receitasPendentes?: number;
-  pagamentosPendentes?: number;
+  totalReceitasAtrasadas?: number;
+  quantidadeReceitasAtrasadas?: number;
 }
 
 export function DashboardStats({
   totalReceitas = 0,
   totalDespesas = 0,
-  totalContasReceber = 0,
   totalProjetosAtivos = 0,
-  receitasPendentes = 0,
-  pagamentosPendentes = 0,
+  totalReceitasAtrasadas = 0,
+  quantidadeReceitasAtrasadas = 0,
 }: DashboardStatsProps) {
   const stats: StatCardProps[] = [
     {
@@ -94,10 +92,10 @@ export function DashboardStats({
       subtitle: `${localdate}`,
     },
     {
-      title: "Contas a receber",
-      value: `R$ ${totalContasReceber.toFixed(2)}`,
+      title: "Receitas atrasadas",
+      value: `R$ ${totalReceitasAtrasadas.toFixed(2)}`,
       icon: Clock,
-      subtitle: `${pagamentosPendentes} pagamentos pendentes`,
+      subtitle: `${quantidadeReceitasAtrasadas} cobranças em atraso`,
     },
     {
       title: "Projetos ativos",
