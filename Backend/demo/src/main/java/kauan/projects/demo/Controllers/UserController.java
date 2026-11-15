@@ -2,14 +2,11 @@ package kauan.projects.demo.Controllers;
 
 
 import kauan.projects.demo.Domain.*;
-import kauan.projects.demo.Domain.DTOS.DespesaDTO;
-import kauan.projects.demo.Domain.DTOS.ProjetoDTO;
-import kauan.projects.demo.Domain.DTOS.ReceitaDTO;
-import kauan.projects.demo.Domain.DTOS.UserDTO;
-import kauan.projects.demo.Domain.DTOS.UsuariosDTO;
+import kauan.projects.demo.Domain.DTOS.*;
 import kauan.projects.demo.Domain.ENUMS.ProjetoStatus;
 import kauan.projects.demo.Domain.ENUMS.ReceitaStatus;
 import kauan.projects.demo.Services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -58,10 +55,15 @@ public class UserController {
     }
 
     @PostMapping("/despesa/me")
-    public DespesaDTO adicionarDespesa(Authentication authentication, @RequestBody Despesa despesa) {
+    public DespesaDTO adicionarDespesa(Authentication authentication, @Valid @RequestBody DespesaRequestDTO despesaRequest) {
 
         User user = userService.GetUsuarioLogado(authentication);
-
+        Despesa despesa = new Despesa();
+        despesa.setCategoria(despesaRequest.categoria());
+        despesa.setDespesaPagamento(despesaRequest.despesaPagamento());
+        despesa.setDataCriacao(despesaRequest.dataCriacao());
+        despesa.setDescricao(despesaRequest.descricao());
+        despesa.setValor(despesaRequest.valor());
         despesa.setUser(user);
 
         user.getDespesas().add(despesa);
@@ -74,9 +76,17 @@ public class UserController {
     }
 
     @PostMapping("/receita/me")
-    public ReceitaDTO adicionarReceita(Authentication authentication, @RequestBody Receita receita) {
+    public ReceitaDTO adicionarReceita(Authentication authentication, @Valid @RequestBody ReceitaRequestDTO receitaRequest) {
         User user = userService.GetUsuarioLogado(authentication);
+        Receita receita = new Receita();
+        receita.setDescricao(receitaRequest.descricao());
+        receita.setValor(receitaRequest.valor());
+        receita.setDataCriacao(receitaRequest.dataCriacao());
+        receita.setCategoria(receitaRequest.categoria());
+        receita.setClienteNome(receitaRequest.clienteNome());
+        receita.setReceitaStatus(receitaRequest.receitaStatus());
         receita.setUser(user);
+
         user.getReceitas().add(receita);
 
         User salvo = userRepository.save(user);
